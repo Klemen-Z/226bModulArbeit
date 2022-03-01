@@ -1,4 +1,7 @@
 package com.main.project;
 
-public class GUI {
+import javax.swing.*;
+
+public class GUI extends JFrame {
+    JFrame frame;
 }

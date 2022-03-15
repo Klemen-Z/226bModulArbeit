@@ -1,4 +1,4 @@
-package com.main.project;
+package com.main.ptsd;
 
 public abstract class Projectile {
     private int damage;

@@ -8,6 +8,14 @@ public class Enemy extends Ship {
 
     HashMap<Integer, Enemy_Projectile> projectiles = new HashMap<>();
 
+    Enemy(int x, int y, int size, int health, int wave, int points){
+        setPoints(points);
+        setWave(wave);
+        setSize(size);
+        setY(y);
+        setX(x);
+    }
+
     public void shoot(){
         boolean b = true;
         Integer i = 0;

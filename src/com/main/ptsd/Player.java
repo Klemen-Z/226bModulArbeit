@@ -6,7 +6,7 @@ public class Player extends Ship {
     private String name;
     private boolean l;
     private boolean r;
-    HashMap<Integer, Player_Projectile> projectiles = new HashMap<>();
+    HashMap<Integer, Player_Projectile> PProjectiles = new HashMap<>();
 
     Player(int x, int y, int health, String name, int size){
         setX(x);
@@ -18,15 +18,15 @@ public class Player extends Ship {
     public void shoot(){
         boolean b = true;
         Integer i = 0;
-        if (!projectiles.isEmpty()){
+        if (!PProjectiles.isEmpty()){
             while (b){
                 i++;
-                if (!projectiles.containsKey(i)){
+                if (!PProjectiles.containsKey(i)){
                     b = false;
                 }
             }
         }
-        projectiles.put(i, new Player_Projectile(8, 1, getX(), getY(), 1));
+        PProjectiles.put(i, new Player_Projectile(8, 1, getX(), getY(), 1));
     }
 
     public void setName(String name) {

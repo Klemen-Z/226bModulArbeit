@@ -6,7 +6,7 @@ public class Enemy extends Ship {
     private int wave;
     private int points;
 
-    HashMap<Integer, Enemy_Projectile> projectiles = new HashMap<>();
+    HashMap<Integer, Enemy_Projectile> EProjectiles = new HashMap<>();
 
     Enemy(int x, int y, int size, int health, int wave, int points){
         setPoints(points);
@@ -19,15 +19,15 @@ public class Enemy extends Ship {
     public void shoot(){
         boolean b = true;
         Integer i = 0;
-        if (!projectiles.isEmpty()){
+        if (!EProjectiles.isEmpty()){
             while (b){
                 i++;
-                if (!projectiles.containsKey(i)){
+                if (!EProjectiles.containsKey(i)){
                     b = false;
                 }
             }
         }
-        projectiles.put(i, new Enemy_Projectile(8, 1, getX(), getY(), 1));
+        EProjectiles.put(i, new Enemy_Projectile(8, 1, getX(), getY(), 1));
     }
 
     public int getPoints() {

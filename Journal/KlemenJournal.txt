@@ -1,0 +1,5 @@
+18.3.2022 - Alle Hauptdateien für den Projekt gemacht
+19.3.2022 - Meisten von den Get und set Methoden + Variabeln geschrieben
+25.3.2022 - Hauptmethoden für die Objekten Geschrieben
+1.4.2022 -
+8.4.2022 -

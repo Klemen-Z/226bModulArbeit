@@ -37,6 +37,15 @@ public class Player extends Ship {
         return name;
     }
 
+    public void move(){
+        int speed = 8;
+        if(this.l) {
+            setX(getX() - speed);
+        } else if (this.r){
+            setX(getX() + speed);
+        }
+    }
+
     public void setL(boolean l) {
         this.l = l;
     }

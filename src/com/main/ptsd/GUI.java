@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class GUI extends JFrame {
     JLabel player = new JLabel("bröder");
-    Player pl = new Player();
+    Player pl = new Player(250, 250, 1, "player 1", 1);
 
     GUI() {
         ImageIcon icon = new ImageIcon("../ScreenshotStarfield.png");

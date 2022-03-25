@@ -10,6 +10,16 @@ public class Player extends Ship {
     private boolean l;
     private int health;
     private boolean r;
+
+    public boolean isShoot() {
+        return shoot;
+    }
+
+    public void setShoot(boolean shoot) {
+        this.shoot = shoot;
+    }
+
+    private boolean shoot;
     HashMap<Integer, Player_Projectile> PProjectiles = new HashMap<>();
 
     Player(int x, int y, int health, String name, int size){
@@ -26,6 +36,7 @@ public class Player extends Ship {
         if (!PProjectiles.isEmpty()){
             while (b){
                 i++;
+                System.out.println(i);
                 if (!PProjectiles.containsKey(i)){
                     b = false;
                 }

@@ -9,12 +9,15 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 public class GUI extends JFrame implements KeyListener {
-    JPanel pa = new JPanel();
+    Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+    private int height = (int) size.getHeight();
+    private int width = (int) size.getWidth();
     JLabel player = new JLabel();
-    Player pl = new Player(225, 400, 5, "player", 1);
-    Border border = BorderFactory.createEmptyBorder(1, 1, 1, 1);
+    Player pl = new Player(width/2-25, height -100, 5, "player", 1);
+    HashMap<Enemy, Integer> capitalCities = new HashMap<Enemy, Integer>();
 
     GUI() {
         ImageIcon icon = new ImageIcon("iconimg.png");
@@ -29,7 +32,7 @@ public class GUI extends JFrame implements KeyListener {
 
         this.setTitle("Space Invaders (Java)");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(500, 500);
+        this.setSize(width, height);
         this.setResizable(false);
         this.setFocusable(true);
         this.getContentPane().setBackground(Color.BLACK);
@@ -39,6 +42,13 @@ public class GUI extends JFrame implements KeyListener {
         this.addKeyListener(this);
         this.setIconImage(icon.getImage());
         validate();
+        makenemey(); {
+
+        }
+    }
+
+    private void makenemey() {
+
     }
 
     @Override
@@ -67,14 +77,6 @@ public class GUI extends JFrame implements KeyListener {
         }
             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                 pl.shoot();
-                System.out.println(Thread.currentThread().getName());
-                System.out.println(Thread.activeCount());
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
             }
     }
 

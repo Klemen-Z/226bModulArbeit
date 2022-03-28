@@ -55,9 +55,9 @@ public class Player extends Ship {
 
     public void move(){
         int speed = 8;
-        if(this.l && getX()  > 50) {
+        if(this.l && getX()  > 0) {
             setX(getX() - speed);
-        } else if (this.r && getX() + 50 < size.getWidth()){
+        } else if (this.r && getX() < size.getWidth()-150){
             setX(getX() + speed);
         }
     }

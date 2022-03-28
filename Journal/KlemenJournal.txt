@@ -1,5 +1,11 @@
-18.3.2022 - Alle Hauptdateien für den Projekt gemacht
-19.3.2022 - Meisten von den Get und set Methoden + Variabeln geschrieben
-25.3.2022 - Hauptmethoden für die Objekten Geschrieben
-1.4.2022 -
-8.4.2022 -
+18.03.2022 - Alle Hauptdateien für den Projekt gemacht
+
+19.03.2022 - Meisten von den Get und set Methoden + Variabeln geschrieben
+
+25.03.2022 - Hauptmethoden für die Objekten geschrieben
+
+28.03.2022 - Bewegung methode updated mit extra parameter für wann es möglich ist
+             zu bewegen und triff detektion für den Geschoss
+1.04.2022 -
+
+8.04.2022 -

@@ -1,8 +1,6 @@
 package com.main.ptsd;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ParameterResolutionException;
-
+import java.awt.*;
 import java.util.HashMap;
 
 public class Player extends Ship {
@@ -10,6 +8,8 @@ public class Player extends Ship {
     private boolean l;
     private int health;
     private boolean r;
+
+    Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 
     public boolean isShoot() {
         return shoot;
@@ -55,9 +55,9 @@ public class Player extends Ship {
 
     public void move(){
         int speed = 8;
-        if(this.l) {
+        if(this.l && getX()  > 50) {
             setX(getX() - speed);
-        } else if (this.r){
+        } else if (this.r && getX() + 50 < size.getWidth()){
             setX(getX() + speed);
         }
     }
@@ -84,32 +84,5 @@ public class Player extends Ship {
 
     public int getHealth() {
         return health;
-    }
-
-    @Test
-    public void Test()  throws ParameterResolutionException {
-        Player p1 = new Player(40, 100, 3, "bob", 1);
-        Player p2 = new Player(40, 100, 3, "bob", 1);
-
-        p1.setL(true);
-        p1.move();
-        p1.setL(false);
-        int x1 = p1.getX();
-
-        p1.move();
-        int x2 = p1.getX();
-
-        assert (x1 == x2);
-
-        int x3 = p2.getX();
-        assert (x3 != x2);
-
-        p1.setR(true);
-        p1.move();
-        p1.move();
-        p1.setL(false);
-        int x4 = p1.getX();
-
-        assert (x3 != x4);
     }
 }

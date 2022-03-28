@@ -9,7 +9,9 @@ public class Player_Projectile extends Projectile{
 
     public void move(){
         int speed = 8;
-        setY(getY() - speed);
+        if (getY() < 25){
+            setY(getY() - speed);
+        }
     }
 
     public boolean hitCheck(int ex, int ey){

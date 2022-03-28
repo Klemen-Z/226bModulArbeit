@@ -1,11 +1,15 @@
 package com.main.ptsd;
 
+import java.awt.*;
 import java.util.HashMap;
 
 public class Enemy extends Ship {
+    private boolean l;
+    private boolean r;
     private int wave;
     private int points;
 
+    Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     HashMap<Integer, Enemy_Projectile> EProjectiles = new HashMap<>();
 
     Enemy(int x, int y, int size, int health, int wave, int points){
@@ -14,6 +18,15 @@ public class Enemy extends Ship {
         setSize(size);
         setY(y);
         setX(x);
+    }
+
+    public void move(){
+        int speed = 8;
+        if(this.l && getX() > 50) {
+            setX(getX() - speed);
+        } else if (this.r && getX() - 50 < size.getWidth()){
+            setX(getX() + speed);
+        }
     }
 
     public void shoot(){
@@ -34,8 +47,24 @@ public class Enemy extends Ship {
         return points;
     }
 
+    public boolean getL(){
+        return l;
+    }
+
+    public boolean getR(){
+        return r;
+    }
+
     public int getWave() {
         return wave;
+    }
+
+    public void setL(boolean l){
+        this.l = l;
+    }
+
+    public void setR(boolean r){
+        this.r = r;
     }
 
     public void setPoints(int points) {

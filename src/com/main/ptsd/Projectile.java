@@ -1,5 +1,7 @@
 package com.main.ptsd;
 
+import java.awt.*;
+
 public abstract class Projectile {
     private int damage;
     private boolean hit;
@@ -7,6 +9,8 @@ public abstract class Projectile {
     private int size;
     private int x;
     private int y;
+
+    Dimension SSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     Projectile(int speed, int damage, int x, int y, int size){
         setDamage(damage);
@@ -62,5 +66,9 @@ public abstract class Projectile {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public boolean outOfBoundsCheck(){
+        return 0 > this.y && SSize.getHeight() < this.y;
     }
 }

@@ -133,7 +133,6 @@ public class GUI extends JPanel implements ActionListener {
         if (Enemy.isEmpty()) {
             win = true;
             runing = false;
-            win = true;
         }
         if (pl.getHealth() <= 0) {
             runing = false;
@@ -152,9 +151,6 @@ public class GUI extends JPanel implements ActionListener {
 
         for (Enemy enemy : Enemy){
             for (Enemy_Projectile ep : enemy.EProjectiles){
-                System.out.println("bulet x : " + ep.getX());
-                System.out.println("bulet y : " + ep.getY());
-
                 if (ep.hitCheck(pl.getX(), pl.getY())){
                     pl.setHealth(pl.getHealth() - 1);
                     delete3 = enemy.EProjectiles.indexOf(ep);
@@ -177,6 +173,10 @@ public class GUI extends JPanel implements ActionListener {
     }
 
     private void allmove() {
+        Integer delete1 = null;
+        Integer delete2 = null;
+        Integer delHelp = null;
+
         pl.move();
         for (Enemy enemy : Enemy) {
             if (enemy.getX() <= 0) {
@@ -205,6 +205,26 @@ public class GUI extends JPanel implements ActionListener {
                 eprojectile.move();
             }
         }
+
+        for (Enemy enemy: Enemy) {
+            for (Enemy_Projectile ep : enemy.EProjectiles){
+                if(ep.outOfBoundsCheck()){
+                    delete1 = enemy.EProjectiles.indexOf(ep);
+                    delHelp = Enemy.indexOf(enemy);
+                }
+            }
+        }
+        for (Player_Projectile pp : pl.PProjectiles) {
+            if (pp.outOfBoundsCheck()){
+                delete2 = pl.PProjectiles.indexOf(pp);
+            }
+        }
+        if (delete1 != null){
+            Enemy.get(delHelp).EProjectiles.remove((int)delete1);
+        }
+        if (delete2 != null){
+            pl.PProjectiles.remove((int)delete2);
+        }
     }
 
     public void Win(){
@@ -222,7 +242,6 @@ public class GUI extends JPanel implements ActionListener {
         for (Enemy enemy : Enemy) {
             enemy.setEtos(enemy.getEtos() + 1);
             if (enemy.getEtos() > enemy.getAttackspeed()) {
-                System.out.println(enemy.getEtos());
                 enemy.shoot();
                 enemy.setEtos(0);
             }

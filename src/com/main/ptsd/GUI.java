@@ -8,15 +8,15 @@ import java.util.*;
 
 public class GUI extends JPanel implements ActionListener {
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-    private int height = (int) size.getHeight()-100;
-    private int width = (int) size.getWidth()-100;
-    Player pl = new Player(width/2-25, height -100, 5, "player", 1);
+    private int height = (int) size.getHeight() - 100;
+    private int width = (int) size.getWidth() - 100;
+    Player pl = new Player(width / 2 - 25, height - 100, 5, "player", 1);
     Image playerimg;
     Image enemyimg;
     Image backgroundimg;
     static final int tickrate = 10;
     Timer timer;
-    int rtos = 1000;
+    int rtos = 10;
     boolean runing = true;
     ArrayList<Enemy> Enemy = new ArrayList<>();
     GUI(){
@@ -54,7 +54,8 @@ public class GUI extends JPanel implements ActionListener {
                         pl.setL(false);
                     }
                 }
-                }
+            }
+
             @Override
             public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
@@ -74,7 +75,10 @@ public class GUI extends JPanel implements ActionListener {
 
     private void makeenemy() {
         for (int i = 1; i <= 11; i++) {
-            Enemy.add(new Enemy(i * 55, 100, 50, 1, 1, 1));
+            Random random = new Random();
+            int r = random.nextInt(100,200);
+            Enemy.add(new Enemy(i * 55, 100, 50, 1, 1, 1, r)
+            );
         }
     }
 
@@ -85,20 +89,25 @@ public class GUI extends JPanel implements ActionListener {
         }
     }
 
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         backgroundimg = new ImageIcon("backgroundimg.png").getImage();
-        g2d.drawImage(backgroundimg,0,0,width,height,null);
-        g2d.drawRect(pl.getX(),pl.getY(),50,50);
-        for(Player_Projectile pprojectile : pl.PProjectiles){
+        g2d.drawImage(backgroundimg, 0, 0, width, height, null);
+        g2d.drawRect(pl.getX(), pl.getY(), 50, 50);
+        for (Player_Projectile pprojectile : pl.PProjectiles) {
             g2d.setColor(Color.GREEN);
-            g2d.fillRect(pprojectile.getX()+25,pprojectile.getY(),2,20);
+            g2d.fillRect(pprojectile.getX() + 25, pprojectile.getY(), 2, 20);
         }
-        g2d.drawImage(playerimg,pl.getX(),pl.getY(),50,50,null);
-        for(Enemy enemy : Enemy){
-            g2d.drawImage(enemyimg,enemy.getX(),enemy.getY(),enemy.getSize(),enemy.getSize(),null);
+        g2d.drawImage(playerimg, pl.getX(), pl.getY(), 50, 50, null);
+        for (Enemy enemy : Enemy) {
+            g2d.drawImage(enemyimg, enemy.getX(), enemy.getY(), enemy.getSize(), enemy.getSize(), null);
         }
-
+        for (Enemy enemy : Enemy) {
+            for (Enemy_Projectile eprojectile : enemy.EProjectiles) {
+                g2d.setColor(Color.RED);
+                g2d.fillRect(eprojectile.getX() + 25, eprojectile.getY()+50, 2, 20);
+            }
+        }
     }
 
     private void hitCheckAll(){
@@ -108,7 +117,7 @@ public class GUI extends JPanel implements ActionListener {
         Integer delete1 = null;
         Integer delete2 = null;
 
-        if (Enemy.isEmpty()){
+        if (Enemy.isEmpty()) {
             runing = false;
         }
         if(pl.getHealth() == 0){
@@ -140,7 +149,7 @@ public class GUI extends JPanel implements ActionListener {
         }
 
         for (Enemy enemy : Enemy){
-            for (Enemy_Projectile ep : enemy.EProjectiles.values()){
+            for (Enemy_Projectile ep : enemy.EProjectiles){
                 if (ep.hitCheck(pl.getX(), pl.getY())){
                     pl.setHealth(pl.getHealth() - 1);
                 }
@@ -172,6 +181,11 @@ public class GUI extends JPanel implements ActionListener {
             pl.shoot();
             rtos = 0;
         }
+        for (Enemy enemy : Enemy) {
+            for (Enemy_Projectile eprojectile : enemy.EProjectiles) {
+                eprojectile.move();
+            }
+        }
     }
 
     @Override
@@ -179,10 +193,20 @@ public class GUI extends JPanel implements ActionListener {
         allmove();
         hitCheckAll();
         repaint();
+        theygotthatgat();
         rtos++;
-
     }
 
+    private void theygotthatgat() {
+        for (Enemy enemy : Enemy) {
+            enemy.setEtos(enemy.getEtos() + 1);
+            if (enemy.getEtos() > enemy.getAttackspeed()) {
+                System.out.println(enemy.getEtos());
+                enemy.shoot();
+                enemy.setEtos(0);
+            }
+        }
+    }
 
 
 }

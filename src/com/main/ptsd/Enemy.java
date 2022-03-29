@@ -1,6 +1,7 @@
 package com.main.ptsd;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Enemy extends Ship {
@@ -8,16 +9,19 @@ public class Enemy extends Ship {
     private boolean r = true;
     private int wave;
     private int points;
+    private int attackspeed;
+    private int etos;
 
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private int height = (int) size.getHeight()-100;
     private int width = (int) size.getWidth()-100;
-    HashMap<Integer, Enemy_Projectile> EProjectiles = new HashMap<>();
+    ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
 
-    Enemy(int x, int y, int size, int health, int wave, int points){
+    Enemy(int x, int y, int size, int health, int wave, int points, int attackspeed){
         setPoints(points);
         setWave(wave);
         setSize(size);
+        setAttackspeed(attackspeed);
         setY(y);
         setX(x);
     }
@@ -34,17 +38,7 @@ public class Enemy extends Ship {
     }
 
     public void shoot(){
-        boolean b = true;
-        Integer i = 0;
-        if (!EProjectiles.isEmpty()){
-            while (b){
-                i++;
-                if (!EProjectiles.containsKey(i)){
-                    b = false;
-                }
-            }
-        }
-        EProjectiles.put(i, new Enemy_Projectile(8, 1, getX(), getY(), 1));
+        EProjectiles.add(new Enemy_Projectile(8, 1, getX(), getY(), 1));
     }
 
     public int getPoints() {
@@ -62,7 +56,21 @@ public class Enemy extends Ship {
     public int getWave() {
         return wave;
     }
+    public int getAttackspeed() {
+        return attackspeed;
+    }
 
+    public int getEtos() {
+        return etos;
+    }
+
+    public void setEtos(int etos) {
+        this.etos = etos;
+    }
+
+    public void setAttackspeed(int attackspeed) {
+        this.attackspeed = attackspeed;
+    }
     public void setL(boolean l){
         this.l = l;
     }
@@ -80,7 +88,6 @@ public class Enemy extends Ship {
             EProjectiles.clear();
         }
     }
-
     public void setWave(int wave) {
         this.wave = wave;
     }

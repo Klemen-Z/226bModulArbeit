@@ -104,10 +104,10 @@ public class GUI extends JPanel implements ActionListener {
     private void hitCheckAll(){
         int temp1 = 1;
 
-        int delete = 0;
+        int delete1 = 0;
 
         if (Enemy.isEmpty()){
-            //timer.stop();
+            runing = false;
         }
         if(pl.getHealth() == 0){
             runing = false;
@@ -116,14 +116,14 @@ public class GUI extends JPanel implements ActionListener {
         for (Enemy enemy : Enemy.values()){
             for (Player_Projectile pp : pl.PProjectiles.values()){
                 if (pp.hitCheck(enemy.getX(), enemy.getY())){
-                    delete = temp1;
+                    delete1 = temp1;
                 }
             }
             temp1++;
         }
 
-        if (delete != 0){
-            Enemy.remove(temp1);
+        if (delete1 != 0){
+            Enemy.remove(delete1);
         }
 
         for (Enemy enemy : Enemy.values()){

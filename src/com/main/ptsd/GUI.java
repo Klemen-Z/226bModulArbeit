@@ -16,8 +16,9 @@ public class GUI extends JPanel implements ActionListener {
     Image backgroundimg;
     static final int tickrate = 10;
     Timer timer;
-    int rtos = 10;
-    Map<Integer, Enemy> Enemy = new TreeMap<>();
+    int rtos = 1000;
+    boolean runing = true;
+    HashMap<Integer, Enemy> Enemy = new HashMap<>();
     GUI(){
         this.setPreferredSize(new Dimension(width,height));
         playerimg = new ImageIcon("playerimg.png").getImage();
@@ -72,14 +73,16 @@ public class GUI extends JPanel implements ActionListener {
     }
 
     private void makeenemy() {
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i < 10; i++) {
             Enemy.put(i, new Enemy(i * 55, 100, 50, 1, 1, 1));
         }
     }
 
     private void startgame() {
         timer = new Timer(tickrate, this);
-        timer.start();
+        if (runing) {
+            timer.start();
+        }
     }
 
     public void paint(Graphics g){
@@ -105,7 +108,7 @@ public class GUI extends JPanel implements ActionListener {
             //timer.stop();
         }
         if(pl.getHealth() == 0){
-            //timer.stop();
+            runing = false;
         }
 
         for (Enemy enemy : Enemy.values()){
@@ -134,16 +137,15 @@ public class GUI extends JPanel implements ActionListener {
                 for(Enemy enemy2 : Enemy.values()){
                     enemy2.setR(true);
                     enemy2.setL(false);
-                    enemy.move();
                 }
             }
             if (enemy.getX() >= width-50) {
                 for(Enemy enemy2 : Enemy.values()){
                     enemy2.setR(false);
                     enemy2.setL(true);
-                    enemy.move();
                 }
             }
+            enemy.move();
         }
         for(Player_Projectile pprojectile : pl.PProjectiles.values()){
             pprojectile.move();
@@ -160,6 +162,7 @@ public class GUI extends JPanel implements ActionListener {
         hitCheckAll();
         repaint();
         rtos++;
+
     }
 
 

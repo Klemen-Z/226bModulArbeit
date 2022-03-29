@@ -24,11 +24,11 @@ public class Enemy extends Ship {
 
     public void move(){
         int speed = 3;
-        if(this.l && getX() > 0) {
+        if(this.l) {
             setX(getX() - speed);
-        } else if (this.r && getX() <= width-50){
-            System.out.println(width-50);
-            System.out.println(this.getX());
+        } else if (this.r){
+            //System.out.println(width-50);
+            //System.out.println(this.getX());
             setX(getX() + speed);
         }
     }

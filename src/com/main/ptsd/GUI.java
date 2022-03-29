@@ -73,7 +73,7 @@ public class GUI extends JPanel implements ActionListener {
     }
 
     private void makeenemy() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i <= 11; i++) {
             Enemy.put(i, new Enemy(i * 55, 100, 50, 1, 1, 1));
         }
     }
@@ -102,7 +102,9 @@ public class GUI extends JPanel implements ActionListener {
     }
 
     private void hitCheckAll(){
-        int temp1 = 0;
+        int temp1 = 1;
+
+        int delete = 0;
 
         if (Enemy.isEmpty()){
             //timer.stop();
@@ -113,12 +115,15 @@ public class GUI extends JPanel implements ActionListener {
 
         for (Enemy enemy : Enemy.values()){
             for (Player_Projectile pp : pl.PProjectiles.values()){
-                enemy.hit(pp.hitCheck(enemy.getX(), enemy.getY()));
                 if (pp.hitCheck(enemy.getX(), enemy.getY())){
-                    Enemy.remove(temp1);
+                    delete = temp1;
                 }
             }
             temp1++;
+        }
+
+        if (delete != 0){
+            Enemy.remove(temp1);
         }
 
         for (Enemy enemy : Enemy.values()){

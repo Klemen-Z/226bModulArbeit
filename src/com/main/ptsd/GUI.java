@@ -224,9 +224,8 @@ public class GUI extends JPanel implements ActionListener {
         if (runing) {
             allmove();
             hitCheckAll();
-            repaint();
             theygotthatgat();
-            System.out.println(pl.getHealth());
+            repaint();
             rtos++;
         } else if (win){
             Win();

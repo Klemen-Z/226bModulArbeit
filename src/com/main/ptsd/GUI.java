@@ -1,9 +1,10 @@
 package com.main.ptsd;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
+import java.util.*;
 
 public class GUI extends JPanel implements ActionListener {
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -16,7 +17,7 @@ public class GUI extends JPanel implements ActionListener {
     static final int tickrate = 10;
     Timer timer;
     int rtos = 10;
-    HashMap<Integer, Enemy> Enemy = new HashMap<>();
+    Map<Integer, Enemy> Enemy = new TreeMap<>();
     GUI(){
         this.setPreferredSize(new Dimension(width,height));
         playerimg = new ImageIcon("playerimg.png").getImage();
@@ -80,7 +81,6 @@ public class GUI extends JPanel implements ActionListener {
 
     private void makeenemy() {
         for (int i = 0; i <= 10; i++) {
-            System.out.println(i);
             Enemy.put(i, new Enemy(i * 55, 100, 50, 1, 1, 1));
         }
     }
@@ -109,13 +109,13 @@ public class GUI extends JPanel implements ActionListener {
     private void allmove() {
         pl.move();
         for(Enemy enemy : Enemy.values()){
-            if (enemy.getX() == 0) {
+            if (enemy.getX() <= 0) {
                 for(Enemy enemy2 : Enemy.values()){
                     enemy2.setR(true);
                     enemy2.setL(false);
                 }
             }
-            if (enemy.getX() == width-50) {
+            if (enemy.getX() >= width-50) {
                 for(Enemy enemy2 : Enemy.values()){
                     enemy2.setR(false);
                     enemy2.setL(true);

@@ -26,7 +26,9 @@ public class Enemy extends Ship {
         int speed = 3;
         if(this.l && getX() > 0) {
             setX(getX() - speed);
-        } else if (this.r && getX() < width-50){
+        } else if (this.r && getX() <= width-50){
+            System.out.println(width-50);
+            System.out.println(this.getX());
             setX(getX() + speed);
         }
     }

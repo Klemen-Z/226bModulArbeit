@@ -105,7 +105,8 @@ public class GUI extends JPanel implements ActionListener {
         int temp1 = 0;
         int temp2 = 0;
 
-        int delete1 = 0;
+        Integer delete1 = null;
+        Integer delete2 = null;
 
         if (Enemy.isEmpty()){
             runing = false;
@@ -123,15 +124,19 @@ public class GUI extends JPanel implements ActionListener {
             }
             temp1++;
         }
+
         for (Player_Projectile pp : pl.PProjectiles){
             if (pp.getHit()){
-                pl.PProjectiles.remove(temp2);
+                delete2 = temp2;
             }
             temp2++;
         }
 
-        if (delete1 != 0){
-            Enemy.remove(delete1);
+        if (delete1 != null){
+            Enemy.remove((int)delete1);
+        }
+        if (delete2 != null){
+            pl.PProjectiles.remove((int)delete2);
         }
 
         for (Enemy enemy : Enemy){

@@ -7,7 +7,7 @@
 28.03.2022 - Bewegung methode updated mit extra parameter für wann es möglich ist
              zu bewegen und triff detektion für den Geschoss
 
-29.03.2022 - Schiessen ist bugged aber es funktioniert für ein bisschen aber dan ist bewegung auch verhindert
+29.03.2022 - Schiessen funktioniert (nur spieler)
 
 1.04.2022 -
 

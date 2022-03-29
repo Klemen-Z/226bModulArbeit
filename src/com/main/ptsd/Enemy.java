@@ -31,14 +31,12 @@ public class Enemy extends Ship {
         if(this.l) {
             setX(getX() - speed);
         } else if (this.r){
-            //System.out.println(width-50);
-            //System.out.println(this.getX());
             setX(getX() + speed);
         }
     }
 
     public void shoot(){
-        EProjectiles.add(new Enemy_Projectile(8, 1, getX(), getY(), 1));
+        EProjectiles.add(new Enemy_Projectile(8, 1, getX() + 25, getY() + 50, 1));
     }
 
     public int getPoints() {

@@ -14,14 +14,13 @@ public class GUI extends JPanel implements ActionListener {
     Image playerimg;
     Image enemyimg;
     Image backgroundimg;
-    static final int tickrate = 10;
+    static final int tickrate = 1;
     Timer timer;
     int rtos = 10;
     boolean runing = true;
     boolean win = false;
     ArrayList<Enemy> Enemy = new ArrayList<>();
     boolean lose = false;
-    boolean win = false;
     GUI() {
         this.setPreferredSize(new Dimension(width, height));
         playerimg = new ImageIcon("playerimg.png").getImage();
@@ -77,9 +76,9 @@ public class GUI extends JPanel implements ActionListener {
     }
 
     private void makeenemy() {
-        for (int i = 1; i <= 11; i++) {
+        for (int i = 1; i <= 20; i++) {
             Random random = new Random();
-            int r = random.nextInt(100, 200);
+            int r = random.nextInt(50, 80);
             Enemy.add(new Enemy(i * 55, 100, 50, 1, 1, 1, r)
             );
         }
@@ -100,7 +99,7 @@ public class GUI extends JPanel implements ActionListener {
             g2d.drawRect(pl.getX(), pl.getY(), 50, 50);
             for (Player_Projectile pprojectile : pl.PProjectiles) {
                 g2d.setColor(Color.GREEN);
-                g2d.fillRect(pprojectile.getX() + 25, pprojectile.getY(), 2, 10);
+                g2d.fillRect(pprojectile.getX(), pprojectile.getY(), 2, 10);
             }
             g2d.drawImage(playerimg, pl.getX(), pl.getY(), 50, 50, null);
             for (Enemy enemy : Enemy) {
@@ -109,7 +108,7 @@ public class GUI extends JPanel implements ActionListener {
             for (Enemy enemy : Enemy) {
                 for (Enemy_Projectile eprojectile : enemy.EProjectiles) {
                     g2d.setColor(Color.RED);
-                    g2d.fillRect(eprojectile.getX() + 25, eprojectile.getY() + 50, 2, 10);
+                    g2d.fillRect(eprojectile.getX(), eprojectile.getY(), 2, 10);
                 }
             }
         } else if (lose){
@@ -153,6 +152,9 @@ public class GUI extends JPanel implements ActionListener {
 
         for (Enemy enemy : Enemy){
             for (Enemy_Projectile ep : enemy.EProjectiles){
+                System.out.println("bulet x : " + ep.getX());
+                System.out.println("bulet y : " + ep.getY());
+
                 if (ep.hitCheck(pl.getX(), pl.getY())){
                     pl.setHealth(pl.getHealth() - 1);
                     delete3 = enemy.EProjectiles.indexOf(ep);

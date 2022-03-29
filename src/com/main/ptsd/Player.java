@@ -32,7 +32,7 @@ public class Player extends Ship {
     }
 
     public void shoot(){
-        PProjectiles.add(new Player_Projectile(8, 1, getX(), getY(), 1));
+        PProjectiles.add(new Player_Projectile(8, 1, getX() + 25, getY(), 1));
     }
 
     public void setName(String name) {

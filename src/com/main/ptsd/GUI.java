@@ -111,13 +111,10 @@ public class GUI extends JPanel implements ActionListener {
     }
 
     private void hitCheckAll(){
-        int temp1 = 0;
-        int temp2 = 0;
-        int temp3 = 0;
-
         Integer delete1 = null;
         Integer delete2 = null;
         Integer delete3 = null;
+        Integer delHelp = null;
 
         if (Enemy.isEmpty()) {
             runing = false;
@@ -129,39 +126,23 @@ public class GUI extends JPanel implements ActionListener {
         for (Enemy enemy : Enemy){
             for (Player_Projectile pp : pl.PProjectiles){
                 if (pp.hitCheck(enemy.getX(), enemy.getY())){
-                    delete1 = temp1;
+                    delete1 = Enemy.indexOf(enemy);
+                    delete2 = pl.PProjectiles.indexOf(pp);
                     pp.setHit(true);
                 }
             }
-            temp1++;
-        }
-
-        for (Player_Projectile pp : pl.PProjectiles){
-            if (pp.getHit()){
-                delete2 = temp2;
-            }
-            temp2++;
         }
 
         for (Enemy enemy : Enemy){
             for (Enemy_Projectile ep : enemy.EProjectiles){
                 if (ep.hitCheck(pl.getX(), pl.getY())){
                     pl.setHealth(pl.getHealth() - 1);
+                    delete3 = enemy.EProjectiles.indexOf(ep);
+                    delHelp = Enemy.indexOf(enemy);
                     ep.setHit(true);
                 }
             }
 
-        }
-        for (Enemy enemy : Enemy){
-            for(Enemy_Projectile ep : enemy.EProjectiles){
-                if(ep.getHit()){
-                    delete3 = temp3;
-                }
-                temp3++;
-            }
-            if (delete3 != null){
-                enemy.EProjectiles.remove(delete3);
-            }
         }
 
         if (delete1 != null){
@@ -169,6 +150,9 @@ public class GUI extends JPanel implements ActionListener {
         }
         if (delete2 != null){
             pl.PProjectiles.remove((int)delete2);
+        }
+        if (delete3 != null){
+            Enemy.get(delHelp).EProjectiles.remove((int)delete3);
         }
     }
 
@@ -209,7 +193,6 @@ public class GUI extends JPanel implements ActionListener {
         hitCheckAll();
         repaint();
         theygotthatgat();
-        System.out.println(pl.getHealth());
         rtos++;
     }
 

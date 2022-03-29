@@ -19,7 +19,8 @@ public class GUI extends JPanel implements ActionListener {
     int rtos = 10;
     boolean runing = true;
     ArrayList<Enemy> Enemy = new ArrayList<>();
-
+    boolean lose = false;
+    boolean win = false;
     GUI() {
         this.setPreferredSize(new Dimension(width, height));
         playerimg = new ImageIcon("playerimg.png").getImage();
@@ -110,11 +111,16 @@ public class GUI extends JPanel implements ActionListener {
                     g2d.fillRect(eprojectile.getX() + 25, eprojectile.getY() + 50, 2, 20);
                 }
             }
-        } else {
+        } else if (lose){
             backgroundimg = new ImageIcon("backgroundimg.png").getImage();
             g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawString("you lost", width / 2, height / 2);
+        } else if (win){
+            backgroundimg = new ImageIcon("backgroundimg.png").getImage();
+            g2d.setColor(Color.WHITE);
+            g2d.drawImage(backgroundimg, 0, 0, width, height, null);
+            g2d.drawString("you won", width / 2, height / 2);
         }
     }
 
@@ -129,9 +135,11 @@ public class GUI extends JPanel implements ActionListener {
 
         if (Enemy.isEmpty()) {
             runing = false;
+            win = true;
         }
         if (pl.getHealth() <= 0) {
             runing = false;
+            lose = true;
         }
 
         for (Enemy enemy : Enemy) {

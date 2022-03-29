@@ -1,6 +1,7 @@
 package com.main.ptsd;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player extends Ship {
@@ -20,7 +21,7 @@ public class Player extends Ship {
     }
 
     private boolean shoot;
-    HashMap<Integer, Player_Projectile> PProjectiles = new HashMap<>();
+    ArrayList<Player_Projectile> PProjectiles = new ArrayList<>();
 
     Player(int x, int y, int health, String name, int size){
         setX(x);
@@ -31,18 +32,7 @@ public class Player extends Ship {
     }
 
     public void shoot(){
-        boolean b = true;
-        Integer i = 0;
-        if (!PProjectiles.isEmpty()){
-            while (b){
-                i++;
-                System.out.println(i);
-                if (!PProjectiles.containsKey(i)){
-                    b = false;
-                }
-            }
-        }
-        PProjectiles.put(i, new Player_Projectile(8, 1, getX(), getY(), 1));
+        PProjectiles.add(new Player_Projectile(8, 1, getX(), getY(), 1));
     }
 
     public void setName(String name) {

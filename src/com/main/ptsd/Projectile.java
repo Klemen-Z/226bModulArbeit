@@ -2,6 +2,7 @@ package com.main.ptsd;
 
 public abstract class Projectile {
     private int damage;
+    private boolean hit;
     private int speed;
     private int size;
     private int x;
@@ -23,6 +24,10 @@ public abstract class Projectile {
         return size;
     }
 
+    public boolean getHit(){
+        return hit;
+    }
+
     public int getX() {
         return x;
     }
@@ -33,6 +38,10 @@ public abstract class Projectile {
 
     public int getDamage() {
         return damage;
+    }
+
+    public void setHit(boolean hit){
+        this.hit = hit;
     }
 
     public void setSize(int size) {

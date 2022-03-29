@@ -18,7 +18,7 @@ public class GUI extends JPanel implements ActionListener {
     Timer timer;
     int rtos = 1000;
     boolean runing = true;
-    HashMap<Integer, Enemy> Enemy = new HashMap<>();
+    ArrayList<Enemy> Enemy = new ArrayList<>();
     GUI(){
         this.setPreferredSize(new Dimension(width,height));
         playerimg = new ImageIcon("playerimg.png").getImage();
@@ -74,7 +74,7 @@ public class GUI extends JPanel implements ActionListener {
 
     private void makeenemy() {
         for (int i = 1; i <= 11; i++) {
-            Enemy.put(i, new Enemy(i * 55, 100, 50, 1, 1, 1));
+            Enemy.add(new Enemy(i * 55, 100, 50, 1, 1, 1));
         }
     }
 
@@ -90,19 +90,20 @@ public class GUI extends JPanel implements ActionListener {
         backgroundimg = new ImageIcon("backgroundimg.png").getImage();
         g2d.drawImage(backgroundimg,0,0,width,height,null);
         g2d.drawRect(pl.getX(),pl.getY(),50,50);
-        for(Player_Projectile pprojectile : pl.PProjectiles.values()){
+        for(Player_Projectile pprojectile : pl.PProjectiles){
             g2d.setColor(Color.GREEN);
             g2d.fillRect(pprojectile.getX()+25,pprojectile.getY(),2,20);
         }
         g2d.drawImage(playerimg,pl.getX(),pl.getY(),50,50,null);
-        for(Enemy enemy : Enemy.values()){
+        for(Enemy enemy : Enemy){
             g2d.drawImage(enemyimg,enemy.getX(),enemy.getY(),enemy.getSize(),enemy.getSize(),null);
         }
 
     }
 
     private void hitCheckAll(){
-        int temp1 = 1;
+        int temp1 = 0;
+        int temp2 = 0;
 
         int delete1 = 0;
 
@@ -113,20 +114,27 @@ public class GUI extends JPanel implements ActionListener {
             runing = false;
         }
 
-        for (Enemy enemy : Enemy.values()){
-            for (Player_Projectile pp : pl.PProjectiles.values()){
+        for (Enemy enemy : Enemy){
+            for (Player_Projectile pp : pl.PProjectiles){
                 if (pp.hitCheck(enemy.getX(), enemy.getY())){
                     delete1 = temp1;
+                    pp.setHit(true);
                 }
             }
             temp1++;
+        }
+        for (Player_Projectile pp : pl.PProjectiles){
+            if (pp.getHit()){
+                pl.PProjectiles.remove(temp2);
+            }
+            temp2++;
         }
 
         if (delete1 != 0){
             Enemy.remove(delete1);
         }
 
-        for (Enemy enemy : Enemy.values()){
+        for (Enemy enemy : Enemy){
             for (Enemy_Projectile ep : enemy.EProjectiles.values()){
                 if (ep.hitCheck(pl.getX(), pl.getY())){
                     pl.setHealth(pl.getHealth() - 1);
@@ -137,22 +145,22 @@ public class GUI extends JPanel implements ActionListener {
 
     private void allmove() {
         pl.move();
-        for(Enemy enemy : Enemy.values()){
+        for(Enemy enemy : Enemy){
             if (enemy.getX() <= 0) {
-                for(Enemy enemy2 : Enemy.values()){
+                for(Enemy enemy2 : Enemy){
                     enemy2.setR(true);
                     enemy2.setL(false);
                 }
             }
             if (enemy.getX() >= width-50) {
-                for(Enemy enemy2 : Enemy.values()){
+                for(Enemy enemy2 : Enemy){
                     enemy2.setR(false);
                     enemy2.setL(true);
                 }
             }
             enemy.move();
         }
-        for(Player_Projectile pprojectile : pl.PProjectiles.values()){
+        for(Player_Projectile pprojectile : pl.PProjectiles){
             pprojectile.move();
         }
         if(rtos > 10 && pl.isShoot()) {

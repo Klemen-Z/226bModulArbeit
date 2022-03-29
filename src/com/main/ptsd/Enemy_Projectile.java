@@ -18,10 +18,6 @@ public class Enemy_Projectile extends Projectile{
     }
 
     public boolean hitCheck(int px, int py){
-        if(this.getX() >= px && this.getX() <= px + 50 && this.getY() >= py && this.getY() <= py + 50){
-            return true;
-        } else {
-            return false;
-        }
+        return this.getX() >= px && this.getX() <= px + 50 && this.getY() >= py && this.getY() <= py + 50;
     }
 }

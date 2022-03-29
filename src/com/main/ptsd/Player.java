@@ -19,7 +19,7 @@ public class Player extends Ship {
         this.shoot = shoot;
     }
 
-    private boolean shoot;
+    private boolean shoot = false;
     HashMap<Integer, Player_Projectile> PProjectiles = new HashMap<>();
 
     Player(int x, int y, int health, String name, int size){
@@ -31,19 +31,18 @@ public class Player extends Ship {
     }
 
     public void shoot(){
-        boolean b = true;
-        Integer i = 0;
-        if (!PProjectiles.isEmpty()){
-            while (b){
-                i++;
-                System.out.println(i);
-                if (!PProjectiles.containsKey(i)){
-                    b = false;
+            boolean b = true;
+            Integer i = 0;
+            if (!PProjectiles.isEmpty()){
+                while (b){
+                    i++;
+                    if (!PProjectiles.containsKey(i)){
+                        b = false;
+                    }
                 }
             }
+            PProjectiles.put(i, new Player_Projectile(8, 1, getX(), getY(), 1));
         }
-        PProjectiles.put(i, new Player_Projectile(8, 1, getX(), getY(), 1));
-    }
 
     public void setName(String name) {
         this.name = name;

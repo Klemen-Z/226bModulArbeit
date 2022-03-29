@@ -4,12 +4,14 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class Enemy extends Ship {
-    private boolean l;
-    private boolean r;
+    private boolean l = false;
+    private boolean r = true;
     private int wave;
     private int points;
 
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+    private int height = (int) size.getHeight()-100;
+    private int width = (int) size.getWidth()-100;
     HashMap<Integer, Enemy_Projectile> EProjectiles = new HashMap<>();
 
     Enemy(int x, int y, int size, int health, int wave, int points){
@@ -21,10 +23,10 @@ public class Enemy extends Ship {
     }
 
     public void move(){
-        int speed = 8;
-        if(this.l && getX() > 50) {
+        int speed = 3;
+        if(this.l && getX() > 0) {
             setX(getX() - speed);
-        } else if (this.r && getX() - 50 < size.getWidth()){
+        } else if (this.r && getX() < width-50){
             setX(getX() + speed);
         }
     }

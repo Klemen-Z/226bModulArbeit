@@ -35,40 +35,32 @@ public class GUI extends JPanel implements ActionListener {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     pl.setShoot(true);
                 }
-                    switch (e.getKeyCode()) {
-                        case KeyEvent.VK_LEFT:
-                            pl.setL(true);
-                            pl.setR(false);
-                            break;
-                        case KeyEvent.VK_RIGHT:
-                            pl.setR(true);
-                            pl.setL(false);
-                            break;
-                        case KeyEvent.VK_A:
-                            pl.setL(true);
-                            pl.setR(false);
-                            break;
-                        case KeyEvent.VK_D:
-                            pl.setR(true);
-                            pl.setL(false);
-                            break;
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_LEFT -> {
+                        pl.setL(true);
+                        pl.setR(false);
                     }
+                    case KeyEvent.VK_RIGHT -> {
+                        pl.setR(true);
+                        pl.setL(false);
+                    }
+                    case KeyEvent.VK_A -> {
+                        pl.setL(true);
+                        pl.setR(false);
+                    }
+                    case KeyEvent.VK_D -> {
+                        pl.setR(true);
+                        pl.setL(false);
+                    }
+                }
                 }
             @Override
             public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_LEFT:
-                        pl.setL(false);
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        pl.setR(false);
-                        break;
-                    case KeyEvent.VK_A:
-                        pl.setL(false);
-                        break;
-                    case KeyEvent.VK_D:
-                        pl.setR(false);
-                        break;
+                    case KeyEvent.VK_LEFT -> pl.setL(false);
+                    case KeyEvent.VK_RIGHT -> pl.setR(false);
+                    case KeyEvent.VK_A -> pl.setL(false);
+                    case KeyEvent.VK_D -> pl.setR(false);
                 }
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     pl.setShoot(false);
@@ -106,6 +98,35 @@ public class GUI extends JPanel implements ActionListener {
 
     }
 
+    private void hitCheckAll(){
+        int temp1 = 0;
+
+        if (Enemy.isEmpty()){
+            //timer.stop();
+        }
+        if(pl.getHealth() == 0){
+            //timer.stop();
+        }
+
+        for (Enemy enemy : Enemy.values()){
+            for (Player_Projectile pp : pl.PProjectiles.values()){
+                enemy.hit(pp.hitCheck(enemy.getX(), enemy.getY()));
+                if (pp.hitCheck(enemy.getX(), enemy.getY())){
+                    Enemy.remove(temp1);
+                }
+            }
+            temp1++;
+        }
+
+        for (Enemy enemy : Enemy.values()){
+            for (Enemy_Projectile ep : enemy.EProjectiles.values()){
+                if (ep.hitCheck(pl.getX(), pl.getY())){
+                    pl.setHealth(pl.getHealth() - 1);
+                }
+            }
+        }
+    }
+
     private void allmove() {
         pl.move();
         for(Enemy enemy : Enemy.values()){
@@ -113,15 +134,16 @@ public class GUI extends JPanel implements ActionListener {
                 for(Enemy enemy2 : Enemy.values()){
                     enemy2.setR(true);
                     enemy2.setL(false);
+                    enemy.move();
                 }
             }
             if (enemy.getX() >= width-50) {
                 for(Enemy enemy2 : Enemy.values()){
                     enemy2.setR(false);
                     enemy2.setL(true);
+                    enemy.move();
                 }
             }
-            enemy.move();
         }
         for(Player_Projectile pprojectile : pl.PProjectiles.values()){
             pprojectile.move();
@@ -135,6 +157,7 @@ public class GUI extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         allmove();
+        hitCheckAll();
         repaint();
         rtos++;
     }

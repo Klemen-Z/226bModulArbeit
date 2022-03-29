@@ -75,6 +75,12 @@ public class Enemy extends Ship {
         this.points = points;
     }
 
+    public void hit(boolean t){
+        if (t){
+            EProjectiles.clear();
+        }
+    }
+
     public void setWave(int wave) {
         this.wave = wave;
     }

@@ -29,7 +29,7 @@ public class Frame extends JFrame implements KeyListener {
         this.setTitle("Space Invaders (Java)");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         //this.setSize(width, height);
-        //this.setResizable(false);
+        this.setResizable(false);
         //this.setFocusable(true);
         //this.getContentPane().setBackground(Color.BLACK);
         //this.setLayout(null);

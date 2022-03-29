@@ -113,14 +113,16 @@ public class GUI extends JPanel implements ActionListener {
     private void hitCheckAll(){
         int temp1 = 0;
         int temp2 = 0;
+        int temp3 = 0;
 
         Integer delete1 = null;
         Integer delete2 = null;
+        Integer delete3 = null;
 
         if (Enemy.isEmpty()) {
             runing = false;
         }
-        if(pl.getHealth() == 0){
+        if(pl.getHealth() <= 0){
             runing = false;
         }
 
@@ -141,19 +143,32 @@ public class GUI extends JPanel implements ActionListener {
             temp2++;
         }
 
+        for (Enemy enemy : Enemy){
+            for (Enemy_Projectile ep : enemy.EProjectiles){
+                if (ep.hitCheck(pl.getX(), pl.getY())){
+                    pl.setHealth(pl.getHealth() - 1);
+                    ep.setHit(true);
+                }
+            }
+
+        }
+        for (Enemy enemy : Enemy){
+            for(Enemy_Projectile ep : enemy.EProjectiles){
+                if(ep.getHit()){
+                    delete3 = temp3;
+                }
+                temp3++;
+            }
+            if (delete3 != null){
+                enemy.EProjectiles.remove(delete3);
+            }
+        }
+
         if (delete1 != null){
             Enemy.remove((int)delete1);
         }
         if (delete2 != null){
             pl.PProjectiles.remove((int)delete2);
-        }
-
-        for (Enemy enemy : Enemy){
-            for (Enemy_Projectile ep : enemy.EProjectiles){
-                if (ep.hitCheck(pl.getX(), pl.getY())){
-                    pl.setHealth(pl.getHealth() - 1);
-                }
-            }
         }
     }
 
@@ -194,6 +209,7 @@ public class GUI extends JPanel implements ActionListener {
         hitCheckAll();
         repaint();
         theygotthatgat();
+        System.out.println(pl.getHealth());
         rtos++;
     }
 

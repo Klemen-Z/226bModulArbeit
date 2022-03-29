@@ -18,6 +18,7 @@ public class GUI extends JPanel implements ActionListener {
     Timer timer;
     int rtos = 10;
     boolean runing = true;
+    boolean win = false;
     ArrayList<Enemy> Enemy = new ArrayList<>();
 
     GUI() {
@@ -98,7 +99,7 @@ public class GUI extends JPanel implements ActionListener {
             g2d.drawRect(pl.getX(), pl.getY(), 50, 50);
             for (Player_Projectile pprojectile : pl.PProjectiles) {
                 g2d.setColor(Color.GREEN);
-                g2d.fillRect(pprojectile.getX() + 25, pprojectile.getY(), 2, 20);
+                g2d.fillRect(pprojectile.getX() + 25, pprojectile.getY(), 2, 10);
             }
             g2d.drawImage(playerimg, pl.getX(), pl.getY(), 50, 50, null);
             for (Enemy enemy : Enemy) {
@@ -107,7 +108,7 @@ public class GUI extends JPanel implements ActionListener {
             for (Enemy enemy : Enemy) {
                 for (Enemy_Projectile eprojectile : enemy.EProjectiles) {
                     g2d.setColor(Color.RED);
-                    g2d.fillRect(eprojectile.getX() + 25, eprojectile.getY() + 50, 2, 20);
+                    g2d.fillRect(eprojectile.getX() + 25, eprojectile.getY() + 50, 2, 10);
                 }
             }
         } else {
@@ -125,6 +126,7 @@ public class GUI extends JPanel implements ActionListener {
         Integer delHelp = null;
 
         if (Enemy.isEmpty()) {
+            win = true;
             runing = false;
         }
         if (pl.getHealth() <= 0) {
@@ -139,13 +141,6 @@ public class GUI extends JPanel implements ActionListener {
                     pp.setHit(true);
                 }
             }
-        }
-
-        for (Player_Projectile pp : pl.PProjectiles){
-            if (pp.getHit()){
-                delete2 = temp2;
-            }
-            temp2++;
         }
 
         for (Enemy enemy : Enemy){
@@ -202,13 +197,15 @@ public class GUI extends JPanel implements ActionListener {
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        allmove();
-        hitCheckAll();
-        repaint();
-        theygotthatgat();
-        rtos++;
+    public void Win(){
+
+    }
+    public void Lose(){
+
+    }
+
+    public void gameover(){
+
     }
 
     private void theygotthatgat() {
@@ -231,7 +228,11 @@ public class GUI extends JPanel implements ActionListener {
             theygotthatgat();
             System.out.println(pl.getHealth());
             rtos++;
+        } else if (win){
+            Win();
+            gameover();
         } else {
+            Lose();
             gameover();
         }
     }

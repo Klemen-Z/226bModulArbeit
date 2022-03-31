@@ -1,7 +1,5 @@
 package com.main.ptsd;
 
-import java.awt.*;
-
 public class Enemy_Projectile extends Projectile{
 
     Enemy_Projectile(int speed, int damage, int x, int y, int size) {

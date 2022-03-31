@@ -2,7 +2,6 @@ package com.main.ptsd;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Player extends Ship {
     private String name;

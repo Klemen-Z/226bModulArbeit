@@ -1,7 +1,12 @@
 package com.main.ptsd;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Scoreboard {
-    HashMap<Integer, Object> runs = new HashMap();
+    Map<Integer, String> scoreboard = new TreeMap<>();
+
+    public void addEntry(String pName, Integer score){
+
+    }
 }

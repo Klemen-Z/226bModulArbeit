@@ -1,16 +1,26 @@
 package com.main.ptsd;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import org.json.simple.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 public class GUI extends JPanel implements ActionListener {
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-    private int height = (int) size.getHeight() - 100;
-    private int width = (int) size.getWidth() - 100;
+    private final int height = (int) size.getHeight() - 100;
+    private final int width = (int) size.getWidth() - 100;
     Player pl = new Player(width / 2 - 25, height - 100, 5, "player", 1);
+
     Image playerimg;
     Image enemyimg;
     Image backgroundimg;
@@ -19,8 +29,11 @@ public class GUI extends JPanel implements ActionListener {
     int rtos = 10;
     boolean runing = true;
     boolean win = false;
-    ArrayList<Enemy> Enemy = new ArrayList<>();
     boolean lose = false;
+
+
+    ArrayList<Enemy> Enemy = new ArrayList<>();
+
     GUI() {
         this.setPreferredSize(new Dimension(width, height));
         playerimg = new ImageIcon("playerimg.png").getImage();
@@ -82,6 +95,7 @@ public class GUI extends JPanel implements ActionListener {
             Enemy.add(new Enemy(i * 55, 100, 50, 1, 1, 1, r)
             );
         }
+        pl.setWave(1);
     }
 
     private void startgame() {
@@ -133,6 +147,7 @@ public class GUI extends JPanel implements ActionListener {
         if (Enemy.isEmpty()) {
             win = true;
             runing = false;
+            pl.setWave(2);
         }
         if (pl.getHealth() <= 0) {
             runing = false;
@@ -230,6 +245,17 @@ public class GUI extends JPanel implements ActionListener {
     public void Win(){
 
     }
+    public void dataStore(Date d, Integer wave){
+        JSONObject json = new JSONObject();
+        json.put("date", "" + d + "");
+        json.put("wave", wave);
+        try (FileWriter file = new FileWriter("Highscores.json")) {
+            file.write(json.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void Lose(){
 
     }
@@ -258,9 +284,11 @@ public class GUI extends JPanel implements ActionListener {
             rtos++;
         } else if (win){
             Win();
+            dataStore(new Date(), pl.getWave());
             gameover();
         } else {
             Lose();
+            dataStore(new Date(), pl.getWave());
             gameover();
         }
     }

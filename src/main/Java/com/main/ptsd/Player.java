@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Player extends Ship {
     private String name;
     private boolean l;
+    private Integer wave;
     private int health;
     private boolean r;
 
@@ -65,6 +66,14 @@ public class Player extends Ship {
 
     public boolean getR() {
         return this.r;
+    }
+
+    public void setWave(Integer wave) {
+        this.wave = wave;
+    }
+
+    public Integer getWave() {
+        return wave;
     }
 
     public void setHealth(int health) {

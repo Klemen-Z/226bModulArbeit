@@ -206,6 +206,8 @@ public class GUI extends JPanel implements ActionListener {
                     enemy2.setL(true);
                 }
             }
+        }
+        for (Enemy enemy : Enemy) {
             enemy.move();
         }
         for (Player_Projectile pprojectile : pl.PProjectiles) {

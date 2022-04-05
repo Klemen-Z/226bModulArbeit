@@ -70,13 +70,8 @@ public class TestMain {
     public JSONArray JSONFileParser(String fileName) throws IOException, ParseException {
         JSONArray jsonA = new JSONArray();
         JSONParser jsonP = new JSONParser();
-        Object o = jsonP.parse(new FileReader(fileName));
-        if(o instanceof JSONArray){
-            jsonA = (JSONArray) o;
-        }
-        else if(o instanceof JSONObject){
-            jsonA.add(o);
-        }
+        JSONArray o = (JSONArray) jsonP.parse(new FileReader(fileName));
+        jsonA.addAll(o);
         return jsonA;
     }
     @Test

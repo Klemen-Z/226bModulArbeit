@@ -25,34 +25,32 @@ public class TestMain {
         date = new Date();
         bob.addEntry(50, date);
 
-        System.out.println(bob.getHighscore());
+        bob.getList();
+        System.out.println("Highest: " + bob.getHighscore());
     }
     @SuppressWarnings("unchecked")
     public void dataStore(Date d, Integer wave, String fileName) throws IOException {
         JSONObject json = new JSONObject();
+        JSONObject finalO = new JSONObject();
         JSONArray jsonA = new JSONArray();
+        FileWriter file = new FileWriter(fileName);
         json.put("date", "" + d + "");
         json.put("wave", wave);
         if (checkFileContentExists(fileName)){
-            JSONParser jsonP = new JSONParser();
-            try (FileWriter file = new FileWriter(fileName)){
-                Object o = jsonP.parse(new FileReader(fileName));
-                if(o instanceof org.json.simple.JSONArray){
-                    jsonA.addAll((JSONArray) o);
-                }
-                else if(o instanceof org.json.simple.JSONObject){
-                    jsonA.add(o);
-                }
+            try {
+                jsonA.addAll(JSONFileParser(fileName));
                 jsonA.add(json);
-                file.write(jsonA.toJSONString());
+                finalO.put("Highscores", jsonA);
+                file.write(finalO.toJSONString());
                 file.flush();
             } catch (IOException | ParseException e) {
                 e.printStackTrace();
             }
         } else {
-            try (FileWriter file = new FileWriter(fileName)){
+            try {
                 jsonA.add(json);
-                file.write(jsonA.toJSONString());
+                finalO.put("Highscores", jsonA);
+                file.write(finalO.toJSONString());
                 file.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -68,7 +66,19 @@ public class TestMain {
         }
         return false;
     }
-
+    @SuppressWarnings("unchecked")
+    public JSONArray JSONFileParser(String fileName) throws IOException, ParseException {
+        JSONArray jsonA = new JSONArray();
+        JSONParser jsonP = new JSONParser();
+        Object o = jsonP.parse(new FileReader(fileName));
+        if(o instanceof JSONArray){
+            jsonA = (JSONArray) o;
+        }
+        else if(o instanceof JSONObject){
+            jsonA.add(o);
+        }
+        return jsonA;
+    }
     @Test
     public void jsonFileTest() throws IOException, InterruptedException {
         dataStore(new Date(), 5, "Highscore.json");

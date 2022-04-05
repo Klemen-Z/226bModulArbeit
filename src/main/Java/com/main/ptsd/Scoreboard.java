@@ -26,4 +26,9 @@ public class Scoreboard {
         }
         return t;
     }
+    public void getList(){
+        for (Integer i : scoreboard.values()){
+            System.out.println(i);
+        }
+    }
 }

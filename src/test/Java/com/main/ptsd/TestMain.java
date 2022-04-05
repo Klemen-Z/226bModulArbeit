@@ -30,14 +30,19 @@ public class TestMain {
     @SuppressWarnings("unchecked")
     public void dataStore(Date d, Integer wave, String fileName) throws IOException {
         JSONObject json = new JSONObject();
-        JSONArray jsonA;
+        JSONArray jsonA = new JSONArray();
+        json.put("date", "" + d + "");
+        json.put("wave", wave);
         if (checkFileContentExists(fileName)){
-            System.out.println("I append");
             JSONParser jsonP = new JSONParser();
-            json.put("date", "" + d + "");
-            json.put("wave", wave);
-            try (FileWriter file = new FileWriter(fileName); FileReader reader = new FileReader(fileName)){
-                jsonA = (JSONArray) jsonP.parse(reader);
+            try (FileWriter file = new FileWriter(fileName)){
+                Object o = jsonP.parse(new FileReader(fileName));
+                if(o instanceof org.json.simple.JSONArray){
+                    jsonA.addAll((JSONArray) o);
+                }
+                else if(o instanceof org.json.simple.JSONObject){
+                    jsonA.add(o);
+                }
                 jsonA.add(json);
                 file.write(jsonA.toJSONString());
                 file.flush();
@@ -45,10 +50,9 @@ public class TestMain {
                 e.printStackTrace();
             }
         } else {
-            json.put("date", "" + d + "");
-            json.put("wave", wave);
             try (FileWriter file = new FileWriter(fileName)){
-                file.write(json.toJSONString());
+                jsonA.add(json);
+                file.write(jsonA.toJSONString());
                 file.flush();
             } catch (IOException e) {
                 e.printStackTrace();

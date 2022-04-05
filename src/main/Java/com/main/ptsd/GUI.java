@@ -286,11 +286,11 @@ public class GUI extends JPanel implements ActionListener {
             rtos++;
         } else if (win){
             Win();
-            dataStore(new Date(), pl.getWave());
+            //dataStore(new Date(), pl.getWave());
             gameover();
         } else {
             Lose();
-            dataStore(new Date(), pl.getWave());
+            //dataStore(new Date(), pl.getWave());
             gameover();
         }
     }

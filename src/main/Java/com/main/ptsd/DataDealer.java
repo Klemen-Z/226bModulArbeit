@@ -20,23 +20,25 @@ public class DataDealer {
 
     @SuppressWarnings("unchecked")
     public void dataStore(Date d, Integer wave) throws IOException {
+        boolean b = false;
         JSONObject json = new JSONObject();
         JSONObject finalO = new JSONObject();
         JSONArray jsonA = new JSONArray();
         FileWriter file = new FileWriter(fileName);
         json.put("date", "" + d + "");
         json.put("wave", wave);
-        if (checkFileContentExists()){
-            try {
-                jsonA.addAll(JSONFileParser());
-                jsonA.add(json);
-                finalO.put("Highscores", jsonA);
-                file.write(finalO.toJSONString());
-                file.flush();
-            } catch (IOException | ParseException e) {
-                e.printStackTrace();
-            }
-        } else {
+        try {
+            JSONArray j = JSONFileParser();
+            jsonA.addAll(j);
+            jsonA.add(json);
+            finalO.put("Highscores", jsonA);
+            file.write(finalO.toJSONString());
+            file.flush();
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+            b = true;
+        }
+        if (b){
             try {
                 jsonA.add(json);
                 finalO.put("Highscores", jsonA);
@@ -46,15 +48,6 @@ public class DataDealer {
                 e.printStackTrace();
             }
         }
-    }
-    public boolean checkFileContentExists() throws IOException {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(fileName));
-            return br.readLine() != null;
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-        return false;
     }
     @SuppressWarnings("unchecked")
     public JSONArray JSONFileParser() throws IOException, ParseException {

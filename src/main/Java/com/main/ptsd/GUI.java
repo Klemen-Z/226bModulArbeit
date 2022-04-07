@@ -1,16 +1,26 @@
 package com.main.ptsd;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import org.json.simple.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 public class GUI extends JPanel implements ActionListener {
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-    private int height = (int) size.getHeight() - 100;
-    private int width = (int) size.getWidth() - 100;
+    private final int height = (int) size.getHeight() - 100;
+    private final int width = (int) size.getWidth() - 100;
     Player pl = new Player(width / 2 - 25, height - 100, 5, "player", 1);
+
     ArrayList<Enemy> Enemy = new ArrayList<>();
     Image playerimg;
     Image enemyimg;
@@ -341,7 +351,7 @@ public class GUI extends JPanel implements ActionListener {
         for (Player_Projectile pprojectile : pl.PProjectiles) {
             pprojectile.move();
         }
-        if (rtos > 0 && pl.isShoot()) {
+        if (rtos > 10 && pl.isShoot()) {
             pl.shoot();
             rtos = 0;
         }

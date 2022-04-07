@@ -7,8 +7,10 @@
 28.03.2022 - Bewegung methode updated mit extra parameter für wann es möglich ist
              zu bewegen und triff detektion für den Geschoss
 
-29.03.2022 - Schiessen gemacht und debugged so wie auch die andere Bugs im Spiel selbst (Jetzt nur den Main Menu zu machen)
+29.03.2022 - Schiessen gemacht und debugged so wie auch die andere Bugs im Spiel selbst
+             (Jetzt nur den Main Menu zu machen)
 
-1.04.2022 -
+1.04.2022 - 7.04.2022 - Gleiche JSON Bug probieren zu fixe. Ich habe es nicht geschafft
+            (Error ist: Unexpected token END OF FILE at position 0.), weiss nicht wieso es vorkommt
 
 8.04.2022 -

@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import org.json.simple.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -19,7 +21,9 @@ public class GUI extends JPanel implements ActionListener {
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private final int height = (int) size.getHeight() - 100;
     private final int width = (int) size.getWidth() - 100;
-    Player pl = new Player(width / 2 - 25, height - 100, 5, "player", 1);
+    Player pl = new Player(width / 2 - 25, height - 100, 500000000, "player", 1);
+    ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
+
 
     ArrayList<Enemy> Enemy = new ArrayList<>();
     Image playerimg;
@@ -44,7 +48,9 @@ public class GUI extends JPanel implements ActionListener {
         this.setFocusable(true);
         this.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+            }
+
             @Override
             public void keyPressed(KeyEvent e) {
                 if (runing) {
@@ -77,7 +83,7 @@ public class GUI extends JPanel implements ActionListener {
                     }
                     if (e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0 && lose || win && e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0) {
                         startscreen = true;
-                        etime =1000;
+                        etime = 1000;
                         lose = false;
                         win = false;
                     }
@@ -114,6 +120,7 @@ public class GUI extends JPanel implements ActionListener {
         });
         startgame();
     }
+
     private void makeenemy() {
         if (difficulity == 1) {
             for (int i = 1; i <= 20; i++) {
@@ -213,28 +220,26 @@ public class GUI extends JPanel implements ActionListener {
             for (Enemy enemy : Enemy) {
                 g2d.drawImage(enemyimg, enemy.getX(), enemy.getY(), enemy.getSize(), enemy.getSize(), null);
             }
-            for (Enemy enemy : Enemy) {
-                for (Enemy_Projectile eprojectile : enemy.EProjectiles) {
-                    g2d.setColor(Color.RED);
-                    g2d.fillRect(eprojectile.getX(), eprojectile.getY(), 2, 10);
-                }
+            for (Enemy_Projectile eprojectile : EProjectiles) {
+                g2d.setColor(Color.RED);
+                g2d.fillRect(eprojectile.getX(), eprojectile.getY(), 2, 10);
             }
             g2d.setColor(Color.WHITE);
-            g2d.setFont(new Font("Calibri",Font.BOLD,20));
+            g2d.setFont(new Font("Calibri", Font.BOLD, 20));
             g2d.drawString("Score:" + String.valueOf(score), 10, 20);
-        } else if (lose){
+        } else if (lose) {
             backgroundimg = new ImageIcon("backgroundimg.png").getImage();
             g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawString("you lost", width / 2, height / 2);
-        } else if (win){
+        } else if (win) {
             backgroundimg = new ImageIcon("backgroundimg.png").getImage();
             g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawString("you won", width / 2, height / 2);
         } else if (startscreen) {
-            Font selected = new Font("Calibri",Font.BOLD,40);
-            Font normal = new Font("Calibri",Font.PLAIN,20);
+            Font selected = new Font("Calibri", Font.BOLD, 40);
+            Font normal = new Font("Calibri", Font.PLAIN, 20);
             backgroundimg = new ImageIcon("backgroundimg.png").getImage();
             g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
@@ -270,7 +275,7 @@ public class GUI extends JPanel implements ActionListener {
         }
     }
 
-    private void hitCheckAll(){
+    private void hitCheckAll() {
         Integer delete1 = null;
         Integer delete2 = null;
         Integer delete3 = null;
@@ -285,9 +290,9 @@ public class GUI extends JPanel implements ActionListener {
             lose = true;
         }
 
-        for (Enemy enemy : Enemy){
-            for (Player_Projectile pp : pl.PProjectiles){
-                if (pp.hitCheck(enemy.getX(), enemy.getY())){
+        for (Enemy enemy : Enemy) {
+            for (Player_Projectile pp : pl.PProjectiles) {
+                if (pp.hitCheck(enemy.getX(), enemy.getY())) {
                     delete1 = Enemy.indexOf(enemy);
                     delete2 = pl.PProjectiles.indexOf(pp);
                     pp.setHit(true);
@@ -295,17 +300,14 @@ public class GUI extends JPanel implements ActionListener {
             }
         }
 
-        for (Enemy enemy : Enemy){
-            for (Enemy_Projectile ep : enemy.EProjectiles){
-                if (ep.hitCheck(pl.getX(), pl.getY())){
+            for (Enemy_Projectile ep : EProjectiles) {
+                if (ep.hitCheck(pl.getX(), pl.getY())) {
                     pl.setHealth(pl.getHealth() - 1);
-                    delete3 = enemy.EProjectiles.indexOf(ep);
-                    delHelp = Enemy.indexOf(enemy);
+                    delete3 = EProjectiles.indexOf(ep);
                     ep.setHit(true);
                 }
             }
 
-        }
 
         if (delete1 != null) {
             score = score + Enemy.get(delete1).getPoints();
@@ -315,7 +317,7 @@ public class GUI extends JPanel implements ActionListener {
             pl.PProjectiles.remove((int) delete2);
         }
         if (delete3 != null){
-            Enemy.get(delHelp).EProjectiles.remove((int)delete3);
+            EProjectiles.remove((int)delete3);
         }
     }
 
@@ -330,20 +332,20 @@ public class GUI extends JPanel implements ActionListener {
                 for (Enemy enemy2 : Enemy) {
                     enemy2.setR(true);
                     enemy2.setL(false);
-                    enemy2.setY(enemy2.getY()+5);
+                    enemy2.setY(enemy2.getY() + 5);
                 }
             }
             if (enemy.getX() >= width - 50) {
                 for (Enemy enemy2 : Enemy) {
                     enemy2.setR(false);
                     enemy2.setL(true);
-                    enemy2.setY(enemy2.getY()+5);
+                    enemy2.setY(enemy2.getY() + 5);
                 }
             }
         }
         for (Enemy enemy : Enemy) {
             enemy.move();
-            if (enemy.getY()>= pl.getY() - 50) {
+            if (enemy.getY() >= pl.getY() - 50) {
                 lose = true;
                 runing = false;
             }
@@ -355,42 +357,38 @@ public class GUI extends JPanel implements ActionListener {
             pl.shoot();
             rtos = 0;
         }
-        for (Enemy enemy : Enemy) {
-            for (Enemy_Projectile eprojectile : enemy.EProjectiles) {
+            for (Enemy_Projectile eprojectile : EProjectiles) {
                 eprojectile.move();
             }
-        }
 
-        for (Enemy enemy: Enemy) {
-            for (Enemy_Projectile ep : enemy.EProjectiles){
-                if(ep.outOfBoundsCheck("e")){
-                    delete1 = enemy.EProjectiles.indexOf(ep);
-                    delHelp = Enemy.indexOf(enemy);
+            for (Enemy_Projectile ep : EProjectiles) {
+                if (ep.outOfBoundsCheck("e")) {
+                    delete1 = EProjectiles.indexOf(ep);
                 }
             }
-        }
         for (Player_Projectile pp : pl.PProjectiles) {
-            if (pp.outOfBoundsCheck("p")){
+            if (pp.outOfBoundsCheck("p")) {
                 delete2 = pl.PProjectiles.indexOf(pp);
             }
         }
         if (delete1 != null){
-            Enemy.get(delHelp).EProjectiles.remove((int)delete1);
+            EProjectiles.remove((int)delete1);
         }
-        if (delete2 != null){
-            pl.PProjectiles.remove((int)delete2);
+        if (delete2 != null) {
+            pl.PProjectiles.remove((int) delete2);
         }
     }
 
-    public void Win(){
+    public void Win() {
 
         Restart();
     }
-    public void Lose(){
+
+    public void Lose() {
         Restart();
     }
 
-    public void Restart(){
+    public void Restart() {
         runing = false;
         score = 1000;
         pl.setHealth(5);
@@ -405,7 +403,7 @@ public class GUI extends JPanel implements ActionListener {
         for (Enemy enemy : Enemy) {
             enemy.setEtos(enemy.getEtos() + 1);
             if (enemy.getEtos() > enemy.getAttackspeed()) {
-                enemy.shoot();
+                EProjectiles.add(new Enemy_Projectile(8, 1, enemy.getX() + 25, enemy.getY() + 50, 1));
                 enemy.setEtos(0);
             }
         }
@@ -420,7 +418,8 @@ public class GUI extends JPanel implements ActionListener {
             rtos++;
             score--;
             etime = 100;
-        } else if (win){
+            System.out.println(EProjectiles);
+        } else if (win) {
             Win();
             etime--;
         } else if (lose) {

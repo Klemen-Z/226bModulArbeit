@@ -18,7 +18,6 @@ public class Enemy extends Ship {
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private int height = (int) size.getHeight()-100;
     private int width = (int) size.getWidth()-100;
-    ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
 
     Enemy(int x, int y, int size, int health, int points, int attackspeed){
         setPoints(points);
@@ -45,7 +44,6 @@ public class Enemy extends Ship {
     public void setHealth(int health) {this.health = health;}
 
     public void shoot(){
-        EProjectiles.add(new Enemy_Projectile(8, 1, getX() + 25, getY() + 50, 1));
     }
 
     public int getPoints() {
@@ -89,7 +87,7 @@ public class Enemy extends Ship {
 
     public void hit(boolean t){
         if (t){
-            EProjectiles.clear();
+         //   EProjectiles.clear();
         }
     }
 }

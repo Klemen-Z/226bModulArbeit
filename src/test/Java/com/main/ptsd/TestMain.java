@@ -31,4 +31,13 @@ public class TestMain {
         Thread.sleep(1000);
         dealer.dataStore(new Date(), 10);
     }
+
+    @Test void RandomJSONMethods(){
+        try {
+            DataDealer dealer = new DataDealer("Highscore.json");
+            dealer.JSONFileArrayParser();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

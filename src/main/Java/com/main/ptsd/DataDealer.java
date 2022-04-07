@@ -31,8 +31,7 @@ public class DataDealer {
         json.put("date", "" + d + "");
         json.put("score", Score);
         try {
-            JSONArray j = JSONFileArrayParser();
-            jsonA.addAll(j);
+            jsonA.addAll(JSONFileArrayParser());
             jsonA.add(json);
             finalO.put("Highscores", jsonA);
             file.write(finalO.toJSONString());
@@ -57,8 +56,10 @@ public class DataDealer {
         try{
             FileReader reader = new FileReader(fileName);
             JSONParser parser = new JSONParser();
-            JSONObject object = (JSONObject)parser.parse(reader);
-            jsonA = (JSONArray)object.get("Highscores");
+            JSONObject json = (JSONObject)parser.parse(reader);
+            jsonA = (JSONArray)json.get("Highscores");
+            System.out.println("Object: " + json);
+            System.out.println("Array: " + jsonA);
             return jsonA;
         } catch (IOException | ParseException e) {
             e.printStackTrace();

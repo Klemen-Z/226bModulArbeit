@@ -98,7 +98,7 @@ public class GUI extends JPanel implements ActionListener {
                                 GUI.difficulity++;
                             }
                         }
-                        case KeyEvent.VK_DOLLAR -> {
+                        case KeyEvent.VK_L -> {
                             GUI.difficulity = 4;
                         }
                     }

@@ -2,28 +2,33 @@ package com.main.ptsd;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Enemy extends Ship {
     private boolean l = false;
     private boolean r = true;
-    private int wave;
+    private int score;
     private int points;
     private int attackspeed;
     private int etos;
+
+
+
+    private int health;
 
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private int height = (int) size.getHeight()-100;
     private int width = (int) size.getWidth()-100;
     ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
 
-    Enemy(int x, int y, int size, int health, int wave, int points, int attackspeed){
+    Enemy(int x, int y, int size, int health, int points, int attackspeed){
         setPoints(points);
-        setWave(wave);
         setSize(size);
         setAttackspeed(attackspeed);
         setY(y);
         setX(x);
+        setHealth(health);
+
+
     }
 
     public void move(){
@@ -34,6 +39,10 @@ public class Enemy extends Ship {
             setX(getX() + speed);
         }
     }
+
+    public int getHealth() {return health;}
+
+    public void setHealth(int health) {this.health = health;}
 
     public void shoot(){
         EProjectiles.add(new Enemy_Projectile(8, 1, getX() + 25, getY() + 50, 1));
@@ -51,9 +60,6 @@ public class Enemy extends Ship {
         return r;
     }
 
-    public int getWave() {
-        return wave;
-    }
     public int getAttackspeed() {
         return attackspeed;
     }
@@ -85,8 +91,5 @@ public class Enemy extends Ship {
         if (t){
             EProjectiles.clear();
         }
-    }
-    public void setWave(int wave) {
-        this.wave = wave;
     }
 }

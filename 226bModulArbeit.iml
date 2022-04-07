@@ -4,8 +4,10 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Tests" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/Java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/Resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/Java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/Test Resources" type="java-test-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -25,5 +27,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="googlecode.json.simple" level="project" />
   </component>
 </module>

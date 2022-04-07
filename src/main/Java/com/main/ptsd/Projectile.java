@@ -68,7 +68,12 @@ public abstract class Projectile {
         this.damage = damage;
     }
 
-    public boolean outOfBoundsCheck(){
-        return 0 > this.y && SSize.getHeight() < this.y;
+    public boolean outOfBoundsCheck(String bulet) {
+        if (bulet.equals("e")) {
+            return 0 < this.y && SSize.getHeight() < this.y;
+        } else {
+            return 0 > this.y;
+
+        }
     }
 }

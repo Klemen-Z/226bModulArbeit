@@ -9,32 +9,35 @@ import java.util.Date;
 
 public class DataDealer {
     private String fileName;
-    JSONParser jsonP = new JSONParser();
 
-    DataDealer(String fileName){
+    DataDealer(String fileName) throws IOException {
+        boolean b;
         setFileName(fileName);
         File f = new File(fileName);
-        assert f.exists();
+        if(!f.exists()){
+            b = f.createNewFile();
+            assert b;
+        }
         assert f.isFile();
     }
 
     @SuppressWarnings("unchecked")
-    public void dataStore(Date d, Integer wave) throws IOException {
+    public void dataStore(Date d, Integer Score) throws IOException {
         boolean b = false;
         JSONObject json = new JSONObject();
         JSONObject finalO = new JSONObject();
         JSONArray jsonA = new JSONArray();
         FileWriter file = new FileWriter(fileName);
         json.put("date", "" + d + "");
-        json.put("wave", wave);
+        json.put("score", Score);
         try {
-            JSONArray j = JSONFileParser();
+            JSONArray j = JSONFileArrayParser();
             jsonA.addAll(j);
             jsonA.add(json);
             finalO.put("Highscores", jsonA);
             file.write(finalO.toJSONString());
             file.flush();
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             b = true;
         }
@@ -49,11 +52,17 @@ public class DataDealer {
             }
         }
     }
-    @SuppressWarnings("unchecked")
-    public JSONArray JSONFileParser() throws IOException, ParseException {
+    public JSONArray JSONFileArrayParser(){
         JSONArray jsonA = new JSONArray();
-        JSONArray o = (JSONArray) jsonP.parse(new FileReader(fileName));
-        jsonA.addAll(o);
+        try{
+            FileReader reader = new FileReader(fileName);
+            JSONParser parser = new JSONParser();
+            JSONObject object = (JSONObject)parser.parse(reader);
+            jsonA = (JSONArray)object.get("Highscores");
+            return jsonA;
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
         return jsonA;
     }
 

@@ -11,8 +11,8 @@ public class Scoreboard {
 
     }
 
-    public void addEntry(int wave, Date time){
-        scoreboard.put(time, wave);
+    public void addEntry(int score, Date time){
+        scoreboard.put(time, score);
     }
     public void removeEntry(Date key){
         scoreboard.remove(key);

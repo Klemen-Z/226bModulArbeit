@@ -11,16 +11,21 @@ public class GUI extends JPanel implements ActionListener {
     private int height = (int) size.getHeight() - 100;
     private int width = (int) size.getWidth() - 100;
     Player pl = new Player(width / 2 - 25, height - 100, 5, "player", 1);
+    ArrayList<Enemy> Enemy = new ArrayList<>();
     Image playerimg;
     Image enemyimg;
     Image backgroundimg;
     static final int tickrate = 1;
     Timer timer;
     int rtos = 10;
-    boolean runing = true;
+    boolean runing = false;
+    boolean startscreen = true;
     boolean win = false;
-    ArrayList<Enemy> Enemy = new ArrayList<>();
     boolean lose = false;
+    static int difficulity = 1;
+    int score = 1000;
+    int etime = 100;
+
     GUI() {
         this.setPreferredSize(new Dimension(width, height));
         playerimg = new ImageIcon("playerimg.png").getImage();
@@ -29,31 +34,57 @@ public class GUI extends JPanel implements ActionListener {
         this.setFocusable(true);
         this.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
+            public void keyTyped(KeyEvent e) {}
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    pl.setShoot(true);
-                }
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_LEFT -> {
-                        pl.setL(true);
-                        pl.setR(false);
+                if (runing) {
+                    if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                        pl.setShoot(true);
                     }
-                    case KeyEvent.VK_RIGHT -> {
-                        pl.setR(true);
-                        pl.setL(false);
+                    switch (e.getKeyCode()) {
+                        case KeyEvent.VK_LEFT -> {
+                            pl.setL(true);
+                            pl.setR(false);
+                        }
+                        case KeyEvent.VK_RIGHT -> {
+                            pl.setR(true);
+                            pl.setL(false);
+                        }
+                        case KeyEvent.VK_A -> {
+                            pl.setL(true);
+                            pl.setR(false);
+                        }
+                        case KeyEvent.VK_D -> {
+                            pl.setR(true);
+                            pl.setL(false);
+                        }
                     }
-                    case KeyEvent.VK_A -> {
-                        pl.setL(true);
-                        pl.setR(false);
+                } else {
+                    if (e.getKeyCode() == KeyEvent.VK_SPACE && !lose && !win && etime > 0) {
+                        runing = true;
+                        startscreen = false;
+                        makeenemy();
                     }
-                    case KeyEvent.VK_D -> {
-                        pl.setR(true);
-                        pl.setL(false);
+                    if (e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0 && lose || win && e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0) {
+                        startscreen = true;
+                        etime =1000;
+                        lose = false;
+                        win = false;
+                    }
+                    switch (e.getKeyCode()) {
+                        case KeyEvent.VK_LEFT -> {
+                            if (GUI.difficulity > 1) {
+                                GUI.difficulity--;
+                            }
+                        }
+                        case KeyEvent.VK_RIGHT -> {
+                            if (GUI.difficulity < 3) {
+                                GUI.difficulity++;
+                            }
+                        }
+                        case KeyEvent.VK_DOLLAR -> {
+                            GUI.difficulity = 4;
+                        }
                     }
                 }
             }
@@ -71,24 +102,91 @@ public class GUI extends JPanel implements ActionListener {
                 }
             }
         });
-        makeenemy();
         startgame();
     }
-
     private void makeenemy() {
-        for (int i = 1; i <= 20; i++) {
-            Random random = new Random();
-            int r = random.nextInt(50, 80);
-            Enemy.add(new Enemy(i * 55, 100, 50, 1, 1, 1, r)
-            );
+        if (difficulity == 1) {
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(200, 400);
+                Enemy.add(new Enemy(i * 55, 100, 50, 1, 100, r)
+                );
+            }
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(200, 400);
+                Enemy.add(new Enemy(i * 55 + 25, 160, 50, 1, 100, r)
+                );
+            }
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(200, 400);
+                Enemy.add(new Enemy(i * 55, 220, 50, 1, 100, r)
+                );
+            }
+        } else if (difficulity == 2) {
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(150, 300);
+                Enemy.add(new Enemy(i * 55, 100, 50, 2, 125, r)
+                );
+            }
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(150, 300);
+                Enemy.add(new Enemy(i * 55 + 25, 160, 50, 2, 125, r)
+                );
+            }
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(150, 300);
+                Enemy.add(new Enemy(i * 55, 220, 50, 2, 125, r)
+                );
+            }
+        } else if (difficulity == 3) {
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(100, 200);
+                Enemy.add(new Enemy(i * 55, 100, 50, 3, 150, r)
+                );
+            }
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(100, 200);
+                Enemy.add(new Enemy(i * 55 + 25, 160, 50, 3, 150, r)
+                );
+            }
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(100, 200);
+                Enemy.add(new Enemy(i * 55, 220, 50, 3, 500, r)
+                );
+            }
+        } else if (difficulity == 4) {
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(1, 2);
+                Enemy.add(new Enemy(i * 55, 100, 50, 5, 500, r)
+                );
+            }
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(1, 2);
+                Enemy.add(new Enemy(i * 55 + 25, 160, 50, 5, 500, r)
+                );
+            }
+            for (int i = 1; i <= 20; i++) {
+                Random random = new Random();
+                int r = random.nextInt(1, 2);
+                Enemy.add(new Enemy(i * 55, 220, 50, 5, 500, r)
+                );
+            }
         }
     }
 
     private void startgame() {
         timer = new Timer(tickrate, this);
-        if (runing) {
-            timer.start();
-        }
+        timer.start();
     }
 
     public void paint(Graphics g) {
@@ -111,6 +209,9 @@ public class GUI extends JPanel implements ActionListener {
                     g2d.fillRect(eprojectile.getX(), eprojectile.getY(), 2, 10);
                 }
             }
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(new Font("Calibri",Font.BOLD,20));
+            g2d.drawString("Score:" + String.valueOf(score), 10, 20);
         } else if (lose){
             backgroundimg = new ImageIcon("backgroundimg.png").getImage();
             g2d.setColor(Color.WHITE);
@@ -121,6 +222,41 @@ public class GUI extends JPanel implements ActionListener {
             g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawString("you won", width / 2, height / 2);
+        } else if (startscreen) {
+            Font selected = new Font("Calibri",Font.BOLD,40);
+            Font normal = new Font("Calibri",Font.PLAIN,20);
+            backgroundimg = new ImageIcon("backgroundimg.png").getImage();
+            g2d.setColor(Color.WHITE);
+            g2d.drawImage(backgroundimg, 0, 0, width, height, null);
+            g2d.drawString("press space to start", width / 2, height / 2);
+
+            if (difficulity == 1) {
+                g2d.setFont(selected);
+                g2d.drawString("Easy", width / 4, 100);
+                g2d.setFont(normal);
+                g2d.drawString("Normal", width / 2, 100);
+                g2d.drawString("Russian", width / 2 + width / 4, 100);
+            } else if (difficulity == 2) {
+                g2d.setFont(normal);
+                g2d.drawString("Easy", width / 4, 100);
+                g2d.setFont(selected);
+                g2d.drawString("Normal", width / 2, 100);
+                g2d.setFont(normal);
+                g2d.drawString("Russian", width / 2 + width / 4, 100);
+            } else if (difficulity == 3) {
+                g2d.setFont(normal);
+                g2d.drawString("Easy", width / 4, 100);
+                g2d.drawString("Normal", width / 2, 100);
+                g2d.setFont(selected);
+                g2d.drawString("Russian", width / 2 + width / 4, 100);
+            } else if (difficulity == 4) {
+                g2d.setFont(normal);
+                g2d.drawString("Easy", width / 4, 100);
+                g2d.drawString("Normal", width / 2, 100);
+                g2d.drawString("Russian", width / 2 + width / 4, 100);
+                g2d.setFont(selected);
+                g2d.drawString("Korean", width / 2, 200);
+            }
         }
     }
 
@@ -162,6 +298,7 @@ public class GUI extends JPanel implements ActionListener {
         }
 
         if (delete1 != null) {
+            score = score + Enemy.get(delete1).getPoints();
             Enemy.remove((int) delete1);
         }
         if (delete2 != null) {
@@ -183,22 +320,28 @@ public class GUI extends JPanel implements ActionListener {
                 for (Enemy enemy2 : Enemy) {
                     enemy2.setR(true);
                     enemy2.setL(false);
+                    enemy2.setY(enemy2.getY()+5);
                 }
             }
             if (enemy.getX() >= width - 50) {
                 for (Enemy enemy2 : Enemy) {
                     enemy2.setR(false);
                     enemy2.setL(true);
+                    enemy2.setY(enemy2.getY()+5);
                 }
             }
         }
         for (Enemy enemy : Enemy) {
             enemy.move();
+            if (enemy.getY()>= pl.getY() - 50) {
+                lose = true;
+                runing = false;
+            }
         }
         for (Player_Projectile pprojectile : pl.PProjectiles) {
             pprojectile.move();
         }
-        if (rtos > 10 && pl.isShoot()) {
+        if (rtos > 0 && pl.isShoot()) {
             pl.shoot();
             rtos = 0;
         }
@@ -210,14 +353,14 @@ public class GUI extends JPanel implements ActionListener {
 
         for (Enemy enemy: Enemy) {
             for (Enemy_Projectile ep : enemy.EProjectiles){
-                if(ep.outOfBoundsCheck()){
+                if(ep.outOfBoundsCheck("e")){
                     delete1 = enemy.EProjectiles.indexOf(ep);
                     delHelp = Enemy.indexOf(enemy);
                 }
             }
         }
         for (Player_Projectile pp : pl.PProjectiles) {
-            if (pp.outOfBoundsCheck()){
+            if (pp.outOfBoundsCheck("p")){
                 delete2 = pl.PProjectiles.indexOf(pp);
             }
         }
@@ -231,12 +374,20 @@ public class GUI extends JPanel implements ActionListener {
 
     public void Win(){
 
+        Restart();
     }
     public void Lose(){
-
+        Restart();
     }
 
-    public void gameover(){
+    public void Restart(){
+        runing = false;
+        score = 1000;
+        pl.setHealth(5);
+        pl.setX(width / 2 - 25);
+        pl.setY(height - 100);
+        Enemy.clear();
+        pl.PProjectiles.clear();
 
     }
 
@@ -256,15 +407,17 @@ public class GUI extends JPanel implements ActionListener {
             allmove();
             hitCheckAll();
             theygotthatgat();
-            repaint();
             rtos++;
+            score--;
+            etime = 100;
         } else if (win){
             Win();
-            gameover();
-        } else {
+            etime--;
+        } else if (lose) {
             Lose();
-            gameover();
+            etime--;
         }
+        repaint();
     }
 }
 

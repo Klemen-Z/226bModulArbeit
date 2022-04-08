@@ -22,26 +22,27 @@ public class DataDealer {
     }
 
     @SuppressWarnings("unchecked")
-    public void dataStore(Date d, Integer Score) throws IOException {
+    public void dataStore(Date d, Integer Score){
         boolean b = false;
         JSONObject json = new JSONObject();
         JSONObject finalO = new JSONObject();
         JSONArray jsonA = new JSONArray();
-        FileWriter file = new FileWriter(fileName);
         json.put("date", "" + d + "");
         json.put("score", Score);
         try {
-            jsonA.addAll(JSONFileArrayParser());
+            jsonA.addAll((JSONArray) JSONFileArrayParser().get("Highscores"));
+            FileWriter file = new FileWriter(fileName);
             jsonA.add(json);
             finalO.put("Highscores", jsonA);
             file.write(finalO.toJSONString());
             file.flush();
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
             b = true;
         }
         if (b){
             try {
+                FileWriter file = new FileWriter(fileName);
                 jsonA.add(json);
                 finalO.put("Highscores", jsonA);
                 file.write(finalO.toJSONString());
@@ -51,20 +52,12 @@ public class DataDealer {
             }
         }
     }
-    public JSONArray JSONFileArrayParser(){
-        JSONArray jsonA = new JSONArray();
-        try{
-            FileReader reader = new FileReader(fileName);
-            JSONParser parser = new JSONParser();
-            JSONObject json = (JSONObject)parser.parse(reader);
-            jsonA = (JSONArray)json.get("Highscores");
-            System.out.println("Object: " + json);
-            System.out.println("Array: " + jsonA);
-            return jsonA;
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-        return jsonA;
+    public JSONObject JSONFileArrayParser() throws IOException, ParseException {
+        FileReader reader = new FileReader(fileName);
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject)parser.parse(reader);
+        System.out.println("Object: " + json);
+        return json;
     }
 
     public String getFileName() {

@@ -1,5 +1,6 @@
 package com.main.ptsd;
 
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.util.Date;
@@ -36,7 +37,7 @@ public class TestMain {
         try {
             DataDealer dealer = new DataDealer("Highscore.json");
             dealer.JSONFileArrayParser();
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }

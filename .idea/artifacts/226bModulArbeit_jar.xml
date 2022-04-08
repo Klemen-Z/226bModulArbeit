@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="226bModulArbeit:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/226bModulArbeit_jar</output-path>
+    <root id="archive" name="226bModulArbeit.jar">
+      <element id="module-output" name="226bModulArbeit" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/junit-jupiter-5.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/junit-jupiter-api-5.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/opentest4j-1.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/junit-platform-commons-1.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/apiguardian-api-1.1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/junit-jupiter-params-5.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/junit-jupiter-engine-5.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/junit-platform-engine-1.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-simple-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/junit-4.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/hamcrest-core-1.1.jar" path-in-jar="/" />
+      <element id="library" level="module" name="JUnit5.8.1" module-name="226bModulArbeit" />
+      <element id="library" level="project" name="googlecode.json.simple" />
+    </root>
+  </artifact>
+</component>

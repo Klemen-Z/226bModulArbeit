@@ -23,7 +23,15 @@ public class GUI extends JPanel implements ActionListener {
     private final int width = (int) size.getWidth() - 100;
     Player pl = new Player(width / 2 - 25, height - 100, 500000000, "player", 1);
     ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
+    DataDealer dataDealer;
 
+    {
+        try {
+            dataDealer = new DataDealer("bro.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     ArrayList<Enemy> Enemy = new ArrayList<>();
     Image playerimg;
@@ -31,14 +39,15 @@ public class GUI extends JPanel implements ActionListener {
     Image backgroundimg;
     static final int tickrate = 1;
     Timer timer;
-    int rtos = 10;
+    int rtos = -90;
     boolean runing = false;
     boolean startscreen = true;
     boolean win = false;
     boolean lose = false;
     static int difficulity = 1;
-    int score = 1000;
+    int score = 0;
     int etime = 100;
+    int invincibilityframe = 0;
 
     GUI() {
         this.setPreferredSize(new Dimension(width, height));
@@ -84,6 +93,7 @@ public class GUI extends JPanel implements ActionListener {
                     if (e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0 && lose || win && e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0) {
                         startscreen = true;
                         etime = 1000;
+                        score = 1000;
                         lose = false;
                         win = false;
                     }
@@ -229,14 +239,19 @@ public class GUI extends JPanel implements ActionListener {
             g2d.drawString("Score:" + String.valueOf(score), 10, 20);
         } else if (lose) {
             backgroundimg = new ImageIcon("backgroundimg.png").getImage();
-            g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(new Font("Calibri", Font.BOLD, 40));
             g2d.drawString("you lost", width / 2, height / 2);
         } else if (win) {
+            g2d.drawString("Score:" + String.valueOf(score), 10, 40);
+        } else if (win) {
             backgroundimg = new ImageIcon("backgroundimg.png").getImage();
-            g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(new Font("Calibri", Font.BOLD, 40));
             g2d.drawString("you won", width / 2, height / 2);
+            g2d.drawString("Score:" + String.valueOf(score), 10, 40);
         } else if (startscreen) {
             Font selected = new Font("Calibri", Font.BOLD, 40);
             Font normal = new Font("Calibri", Font.PLAIN, 20);
@@ -300,13 +315,14 @@ public class GUI extends JPanel implements ActionListener {
             }
         }
 
-            for (Enemy_Projectile ep : EProjectiles) {
-                if (ep.hitCheck(pl.getX(), pl.getY())) {
-                    pl.setHealth(pl.getHealth() - 1);
-                    delete3 = EProjectiles.indexOf(ep);
-                    ep.setHit(true);
-                }
+        for (Enemy_Projectile ep : EProjectiles) {
+            if (ep.hitCheck(pl.getX(), pl.getY()) && invincibilityframe <= 0) {
+                invincibilityframe = 30;
+                pl.setHealth(pl.getHealth() - 1);
+                delete3 = EProjectiles.indexOf(ep);
+                ep.setHit(true);
             }
+        }
 
 
         if (delete1 != null) {
@@ -316,13 +332,13 @@ public class GUI extends JPanel implements ActionListener {
         if (delete2 != null) {
             pl.PProjectiles.remove((int) delete2);
         }
-        if (delete3 != null){
-            EProjectiles.remove((int)delete3);
+        if (delete3 != null) {
+            EProjectiles.remove((int) delete3);
         }
     }
 
     private void allmove() {
-        Integer delete1 = null;
+        ArrayList<Integer> delete1 = new ArrayList<>();
         Integer delete2 = null;
         Integer delHelp = null;
 
@@ -357,30 +373,36 @@ public class GUI extends JPanel implements ActionListener {
             pl.shoot();
             rtos = 0;
         }
-            for (Enemy_Projectile eprojectile : EProjectiles) {
-                eprojectile.move();
-            }
-
+        for (Enemy_Projectile eprojectile : EProjectiles) {
+            eprojectile.move();
+        }
             for (Enemy_Projectile ep : EProjectiles) {
                 if (ep.outOfBoundsCheck("e")) {
-                    delete1 = EProjectiles.indexOf(ep);
+                    delete1.add( EProjectiles.indexOf(ep));
                 }
             }
-        for (Player_Projectile pp : pl.PProjectiles) {
-            if (pp.outOfBoundsCheck("p")) {
-                delete2 = pl.PProjectiles.indexOf(pp);
+            for (Player_Projectile pp : pl.PProjectiles) {
+                if (pp.outOfBoundsCheck("p")) {
+                    delete2 = pl.PProjectiles.indexOf(pp);
+                }
+            }
+            for (Integer d1: delete1) {
+                EProjectiles.remove((int) d1);
+            }
+            delete1.clear();
+            if (delete2 != null) {
+                pl.PProjectiles.remove((int) delete2);
             }
         }
-        if (delete1 != null){
-            EProjectiles.remove((int)delete1);
-        }
-        if (delete2 != null) {
-            pl.PProjectiles.remove((int) delete2);
-        }
-    }
 
     public void Win() {
-
+        /*
+        try {
+            dataDealer.dataStore(new Date(), score);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
         Restart();
     }
 
@@ -416,9 +438,12 @@ public class GUI extends JPanel implements ActionListener {
             hitCheckAll();
             theygotthatgat();
             rtos++;
-            score--;
+            invincibilityframe--;
+            if (score > 0) {
+                score--;
+            }
             etime = 100;
-            System.out.println(EProjectiles);
+            System.out.println(EProjectiles.size());
         } else if (win) {
             Win();
             etime--;

@@ -1,22 +1,21 @@
 package com.main.ptsd;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
-
-import org.json.simple.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Random;
 import javax.sound.sampled.*;
 
 public class GUI extends JPanel implements ActionListener {
+
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private final int height = (int) size.getHeight() - 100;
     private final int width = (int) size.getWidth() - 100;
@@ -50,14 +49,14 @@ public class GUI extends JPanel implements ActionListener {
     int etime = 100;
     int invincibilityframe = 0;
     boolean bro = true;
-    int highscore = 0;
+    int highscore;
 
     GUI() {
         long highscore2 = scoreboard.getHighscore();
         highscore = (int) highscore2;
         this.setPreferredSize(new Dimension(width, height));
-        playerimg = new ImageIcon("src/main/Resources/playerimg.png").getImage();
-        enemyimg = new ImageIcon("src/main/Resources/enemyimg.png").getImage();
+        playerimg = new ImageIcon(loadImage("playerimg.png", 50, 50)).getImage();
+        enemyimg = new ImageIcon(loadImage("enemyimg.png", 50, 50)).getImage();
         this.setBackground(Color.BLACK);
         this.setFocusable(true);
         this.addKeyListener(new KeyListener() {
@@ -116,9 +115,7 @@ public class GUI extends JPanel implements ActionListener {
                                 GUI.difficulity++;
                             }
                         }
-                        case KeyEvent.VK_L -> {
-                            GUI.difficulity = 4;
-                        }
+                        case KeyEvent.VK_L -> GUI.difficulity = 4;
                     }
                 }
             }
@@ -138,6 +135,34 @@ public class GUI extends JPanel implements ActionListener {
         });
         startgame();
     }
+
+    public Image loadImage(String name, int width, int height){
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream input = classLoader.getResourceAsStream(name);
+        BufferedImage image = null;
+        try {
+            assert input != null;
+            image = ImageIO.read(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert image != null;
+        return image.getScaledInstance(width, height,  Image.SCALE_SMOOTH);
+    }
+
+    /*public File loadSound(String name, int width, int height){
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream input = classLoader.getResourceAsStream(name);
+        BufferedInputStream sound = null;
+        try {
+            assert input != null;
+            sound = IO;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert image != null;
+        return image.getScaledInstance(width, height,  Image.SCALE_SMOOTH);
+    }*/
 
     private void makeenemy() {
         if (difficulity == 1) {
@@ -244,11 +269,11 @@ public class GUI extends JPanel implements ActionListener {
             }
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 20));
-            g2d.drawString("Score:" + String.valueOf(score), 10, 20);
+            g2d.drawString("Score:" + score, 10, 20);
             if (score < highscore) {
-                g2d.drawString("High-Score:" + String.valueOf(highscore), 10, 40);
+                g2d.drawString("High-Score:" + highscore, 10, 40);
             } else {
-                g2d.drawString("High-Score:" + String.valueOf(score), 10, 40);
+                g2d.drawString("High-Score:" + score, 10, 40);
             }
 
         } else if (lose) {
@@ -263,7 +288,7 @@ public class GUI extends JPanel implements ActionListener {
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 40));
             g2d.drawString("you won", width / 2, height / 2);
-            g2d.drawString("Score:" + String.valueOf(score), 10, 40);
+            g2d.drawString("Score:" + score, 10, 40);
         } else if (startscreen) {
             Font selected = new Font("Calibri", Font.BOLD, 40);
             Font normal = new Font("Calibri", Font.PLAIN, 20);
@@ -306,7 +331,6 @@ public class GUI extends JPanel implements ActionListener {
         Integer delete1 = null;
         Integer delete2 = null;
         Integer delete3 = null;
-        Integer delHelp = null;
 
         if (Enemy.isEmpty()) {
             win = true;
@@ -352,7 +376,6 @@ public class GUI extends JPanel implements ActionListener {
     private void allmove() {
         ArrayList<Integer> delete1 = new ArrayList<>();
         Integer delete2 = null;
-        Integer delHelp = null;
         pl.move();
         for (Enemy enemy : Enemy) {
             if (enemy.getX() <= 0) {

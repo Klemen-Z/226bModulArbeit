@@ -28,7 +28,7 @@ public class Scoreboard {
             System.out.println(i);
         }
     }
-    private void insertValues() throws IOException {
+    public void insertValues() throws IOException {
         DataDealer d = new DataDealer("Highscore.json");
         scoreboard.clear();
         scoreboard.putAll(d.getValues());

@@ -23,6 +23,7 @@ public class GUI extends JPanel implements ActionListener {
     Player pl = new Player(width / 2 - 25, height - 100, 5, "player", 1);
     ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
     DataDealer dataDealer;
+    Scoreboard scoreboard = new Scoreboard();
 
     {
         try {
@@ -52,6 +53,8 @@ public class GUI extends JPanel implements ActionListener {
     int highscore = 0;
 
     GUI() {
+        long highscore2 = scoreboard.getHighscore();
+        highscore = (int) highscore2;
         this.setPreferredSize(new Dimension(width, height));
         playerimg = new ImageIcon("src/main/Resources/playerimg.png").getImage();
         enemyimg = new ImageIcon("src/main/Resources/enemyimg.png").getImage();
@@ -67,11 +70,6 @@ public class GUI extends JPanel implements ActionListener {
                 if (runing) {
                     if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                         pl.setShoot(true);
-                        try {
-                            music();
-                        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-                            ex.printStackTrace();
-                        }
                     }
                     switch (e.getKeyCode()) {
                         case KeyEvent.VK_LEFT -> {
@@ -104,6 +102,8 @@ public class GUI extends JPanel implements ActionListener {
                         bro = true;
                         lose = false;
                         win = false;
+                        long highscore2 = scoreboard.getHighscore();
+                        highscore = (int) highscore2;
                     }
                     switch (e.getKeyCode()) {
                         case KeyEvent.VK_LEFT -> {
@@ -353,7 +353,6 @@ public class GUI extends JPanel implements ActionListener {
         ArrayList<Integer> delete1 = new ArrayList<>();
         Integer delete2 = null;
         Integer delHelp = null;
-
         pl.move();
         for (Enemy enemy : Enemy) {
             if (enemy.getX() <= 0) {
@@ -382,6 +381,11 @@ public class GUI extends JPanel implements ActionListener {
             pprojectile.move();
         }
         if (rtos > 10 && pl.isShoot()) {
+            try {
+                music();
+            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+                ex.printStackTrace();
+            }
             pl.shoot();
             rtos = 0;
         }
@@ -410,6 +414,11 @@ public class GUI extends JPanel implements ActionListener {
     public void Win() {
         if (bro) {
             dataDealer.dataStore(new Date(), score);
+            try {
+                scoreboard.insertValues();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             bro = false;
         }
         Restart();
@@ -433,6 +442,13 @@ public class GUI extends JPanel implements ActionListener {
         for (Enemy enemy : Enemy) {
             enemy.setEtos(enemy.getEtos() + 1);
             if (enemy.getEtos() > enemy.getAttackspeed()) {
+                if (difficulity != 4) {
+                    try {
+                        music();
+                    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 EProjectiles.add(new Enemy_Projectile(8, 1, enemy.getX() + 25, enemy.getY() + 50, 1));
                 enemy.setEtos(0);
             }
@@ -440,10 +456,7 @@ public class GUI extends JPanel implements ActionListener {
     }
     public void music() throws UnsupportedAudioFileException, IOException, LineUnavailableException
     {
-        //Java liest Musik
-
         File file = new File("src/main/Resources/shoot1.wav");
-
         AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
         Clip clip = AudioSystem.getClip();
         clip.open(audioStream);

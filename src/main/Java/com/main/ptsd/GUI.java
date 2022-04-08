@@ -2,10 +2,7 @@ package com.main.ptsd;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 import org.json.simple.*;
 
@@ -15,23 +12,26 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Random;
+import javax.sound.sampled.*;
 
 public class GUI extends JPanel implements ActionListener {
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private final int height = (int) size.getHeight() - 100;
     private final int width = (int) size.getWidth() - 100;
-    Player pl = new Player(width / 2 - 25, height - 100, 500000000, "player", 1);
+    Player pl = new Player(width / 2 - 25, height - 100, 5, "player", 1);
     ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
     DataDealer dataDealer;
 
     {
         try {
-            dataDealer = new DataDealer("bro.json");
+            dataDealer = new DataDealer("Highscore.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     ArrayList<Enemy> Enemy = new ArrayList<>();
     Image playerimg;
@@ -48,11 +48,13 @@ public class GUI extends JPanel implements ActionListener {
     int score = 0;
     int etime = 100;
     int invincibilityframe = 0;
+    boolean bro = true;
+    int highscore = 0;
 
     GUI() {
         this.setPreferredSize(new Dimension(width, height));
-        playerimg = new ImageIcon("playerimg.png").getImage();
-        enemyimg = new ImageIcon("enemyimg.png").getImage();
+        playerimg = new ImageIcon("src/main/Resources/playerimg.png").getImage();
+        enemyimg = new ImageIcon("src/main/Resources/enemyimg.png").getImage();
         this.setBackground(Color.BLACK);
         this.setFocusable(true);
         this.addKeyListener(new KeyListener() {
@@ -65,6 +67,11 @@ public class GUI extends JPanel implements ActionListener {
                 if (runing) {
                     if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                         pl.setShoot(true);
+                        try {
+                            music();
+                        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                     switch (e.getKeyCode()) {
                         case KeyEvent.VK_LEFT -> {
@@ -94,6 +101,7 @@ public class GUI extends JPanel implements ActionListener {
                         startscreen = true;
                         etime = 1000;
                         score = 1000;
+                        bro = true;
                         lose = false;
                         win = false;
                     }
@@ -219,7 +227,7 @@ public class GUI extends JPanel implements ActionListener {
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         if (runing) {
-            backgroundimg = new ImageIcon("backgroundimg.png").getImage();
+            backgroundimg = new ImageIcon("src/main/Resources/backgroundimg.png").getImage();
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawRect(pl.getX(), pl.getY(), 50, 50);
             for (Player_Projectile pprojectile : pl.PProjectiles) {
@@ -237,16 +245,20 @@ public class GUI extends JPanel implements ActionListener {
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 20));
             g2d.drawString("Score:" + String.valueOf(score), 10, 20);
+            if (score < highscore) {
+                g2d.drawString("High-Score:" + String.valueOf(highscore), 10, 40);
+            } else {
+                g2d.drawString("High-Score:" + String.valueOf(score), 10, 40);
+            }
+
         } else if (lose) {
-            backgroundimg = new ImageIcon("backgroundimg.png").getImage();
+            backgroundimg = new ImageIcon("src/main/Resources/backgroundimg.png").getImage();
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 40));
             g2d.drawString("you lost", width / 2, height / 2);
         } else if (win) {
-            g2d.drawString("Score:" + String.valueOf(score), 10, 40);
-        } else if (win) {
-            backgroundimg = new ImageIcon("backgroundimg.png").getImage();
+            backgroundimg = new ImageIcon("src/main/Resources/backgroundimg.png").getImage();
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 40));
@@ -255,7 +267,7 @@ public class GUI extends JPanel implements ActionListener {
         } else if (startscreen) {
             Font selected = new Font("Calibri", Font.BOLD, 40);
             Font normal = new Font("Calibri", Font.PLAIN, 20);
-            backgroundimg = new ImageIcon("backgroundimg.png").getImage();
+            backgroundimg = new ImageIcon("src/main/Resources/backgroundimg.png").getImage();
             g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawString("press space to start", width / 2, height / 2);
@@ -376,33 +388,30 @@ public class GUI extends JPanel implements ActionListener {
         for (Enemy_Projectile eprojectile : EProjectiles) {
             eprojectile.move();
         }
-            for (Enemy_Projectile ep : EProjectiles) {
-                if (ep.outOfBoundsCheck("e")) {
-                    delete1.add( EProjectiles.indexOf(ep));
-                }
-            }
-            for (Player_Projectile pp : pl.PProjectiles) {
-                if (pp.outOfBoundsCheck("p")) {
-                    delete2 = pl.PProjectiles.indexOf(pp);
-                }
-            }
-            for (Integer d1: delete1) {
-                EProjectiles.remove((int) d1);
-            }
-            delete1.clear();
-            if (delete2 != null) {
-                pl.PProjectiles.remove((int) delete2);
+        for (Enemy_Projectile ep : EProjectiles) {
+            if (ep.outOfBoundsCheck("e")) {
+                delete1.add(EProjectiles.indexOf(ep));
             }
         }
+        for (Player_Projectile pp : pl.PProjectiles) {
+            if (pp.outOfBoundsCheck("p")) {
+                delete2 = pl.PProjectiles.indexOf(pp);
+            }
+        }
+        for (Integer d1 : delete1) {
+            EProjectiles.remove((int) d1);
+        }
+        delete1.clear();
+        if (delete2 != null) {
+            pl.PProjectiles.remove((int) delete2);
+        }
+    }
 
     public void Win() {
-        /*
-        try {
+        if (bro) {
             dataDealer.dataStore(new Date(), score);
-        } catch (IOException e) {
-            e.printStackTrace();
+            bro = false;
         }
-        */
         Restart();
     }
 
@@ -412,7 +421,6 @@ public class GUI extends JPanel implements ActionListener {
 
     public void Restart() {
         runing = false;
-        score = 1000;
         pl.setHealth(5);
         pl.setX(width / 2 - 25);
         pl.setY(height - 100);
@@ -430,6 +438,17 @@ public class GUI extends JPanel implements ActionListener {
             }
         }
     }
+    public void music() throws UnsupportedAudioFileException, IOException, LineUnavailableException
+    {
+        //Java liest Musik
+
+        File file = new File("src/main/Resources/shoot2.wav");
+
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioStream);
+        clip.start();
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -443,7 +462,6 @@ public class GUI extends JPanel implements ActionListener {
                 score--;
             }
             etime = 100;
-            System.out.println(EProjectiles.size());
         } else if (win) {
             Win();
             etime--;

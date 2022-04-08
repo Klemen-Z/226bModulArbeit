@@ -5,7 +5,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class DataDealer {
     private String fileName;
@@ -65,6 +67,23 @@ public class DataDealer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @SuppressWarnings("unchecked")
+    public HashMap<Integer, Long> getValues(){
+        HashMap<Integer, Long> highscores = new HashMap<>();
+        try {
+            ArrayList<JSONObject> jsonA = new ArrayList<>();
+            JSONArray jsonA1 = (JSONArray) JSONFileArrayParser().get("Highscores");
+            jsonA1.forEach(i -> jsonA.add((JSONObject) i));
+            Integer i = 0;
+            for (JSONObject json : jsonA){
+                i++;
+                highscores.put(i, (Long)json.get("score"));
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return highscores;
     }
 
     public String getFileName() {

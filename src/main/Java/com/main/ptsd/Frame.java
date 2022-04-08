@@ -1,9 +1,13 @@
 package com.main.ptsd;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class Frame extends JFrame implements KeyListener {
@@ -14,9 +18,23 @@ public class Frame extends JFrame implements KeyListener {
     GUI panel;
     HashMap<Enemy, Integer> capitalCities = new HashMap<Enemy, Integer>();
 
+    public Image loadImage(String name, int width, int height){
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream input = classLoader.getResourceAsStream(name);
+        BufferedImage image = null;
+        try {
+            assert input != null;
+            image = ImageIO.read(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert image != null;
+        return image.getScaledInstance(width, height,  Image.SCALE_SMOOTH);
+    }
+
     Frame() {
         panel = new GUI();
-        ImageIcon icon = new ImageIcon("iconimg.png");
+        ImageIcon icon = new ImageIcon(loadImage("iconimg.png", 150, 150));
         //ImageIcon playerimg = new ImageIcon("playerimg.png");
         //Image image = playerimg.getImage();
         //Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);

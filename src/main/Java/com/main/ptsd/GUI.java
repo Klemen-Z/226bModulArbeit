@@ -252,7 +252,7 @@ public class GUI extends JPanel implements ActionListener {
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         if (runing) {
-            backgroundimg = new ImageIcon("src/main/Resources/backgroundimg.png").getImage();
+            backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawRect(pl.getX(), pl.getY(), 50, 50);
             for (Player_Projectile pprojectile : pl.PProjectiles) {
@@ -277,13 +277,13 @@ public class GUI extends JPanel implements ActionListener {
             }
 
         } else if (lose) {
-            backgroundimg = new ImageIcon("src/main/Resources/backgroundimg.png").getImage();
+            backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 40));
             g2d.drawString("you lost", width / 2, height / 2);
         } else if (win) {
-            backgroundimg = new ImageIcon("src/main/Resources/backgroundimg.png").getImage();
+            backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 40));
@@ -292,7 +292,7 @@ public class GUI extends JPanel implements ActionListener {
         } else if (startscreen) {
             Font selected = new Font("Calibri", Font.BOLD, 40);
             Font normal = new Font("Calibri", Font.PLAIN, 20);
-            backgroundimg = new ImageIcon("src/main/Resources/backgroundimg.png").getImage();
+            backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
             g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawString("press space to start", width / 2, height / 2);

@@ -442,7 +442,7 @@ public class GUI extends JPanel implements ActionListener {
     {
         //Java liest Musik
 
-        File file = new File("src/main/Resources/shoot2.wav");
+        File file = new File("src/main/Resources/shoot1.wav");
 
         AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
         Clip clip = AudioSystem.getClip();

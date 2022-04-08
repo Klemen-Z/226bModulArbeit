@@ -1,25 +1,22 @@
 package com.main.ptsd;
 
-import java.util.Date;
+import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Scoreboard {
-    Map<Date, Integer> scoreboard = new TreeMap<>();
+    Map<Integer, Long> scoreboard = new TreeMap<>();
 
     Scoreboard(){
-
+        try{
+            insertValues();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
-
-    public void addEntry(int score, Date time){
-        scoreboard.put(time, score);
-    }
-    public void removeEntry(Date key){
-        scoreboard.remove(key);
-    }
-    public Integer getHighscore(){
-        Integer t = 0;
-        for (Integer i : scoreboard.values()){
+    public Long getHighscore(){
+        Long t = 0L;
+        for (Long i : scoreboard.values()){
             if (i > t){
                 t = i;
             }
@@ -27,8 +24,13 @@ public class Scoreboard {
         return t;
     }
     public void getList(){
-        for (Integer i : scoreboard.values()){
+        for (Long i : scoreboard.values()){
             System.out.println(i);
         }
+    }
+    private void insertValues() throws IOException {
+        DataDealer d = new DataDealer("Highscore.json");
+        scoreboard.clear();
+        scoreboard.putAll(d.getValues());
     }
 }

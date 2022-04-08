@@ -30,6 +30,7 @@ public class Scoreboard {
     }
     private void insertValues() throws IOException {
         DataDealer d = new DataDealer("Highscore.json");
+        scoreboard.clear();
         scoreboard.putAll(d.getValues());
     }
 }

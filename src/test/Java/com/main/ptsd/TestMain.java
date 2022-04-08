@@ -36,8 +36,8 @@ public class TestMain {
     @Test void RandomJSONMethods(){
         try {
             DataDealer dealer = new DataDealer("Highscore.json");
-            dealer.JSONFileArrayParser();
-        } catch (IOException | ParseException e) {
+            //dealer
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

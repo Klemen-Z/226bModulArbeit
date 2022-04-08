@@ -55,9 +55,16 @@ public class DataDealer {
     public JSONObject JSONFileArrayParser() throws IOException, ParseException {
         FileReader reader = new FileReader(fileName);
         JSONParser parser = new JSONParser();
-        JSONObject json = (JSONObject)parser.parse(reader);
-        System.out.println("Object: " + json);
-        return json;
+        return (JSONObject)parser.parse(reader);
+    }
+    public void JSONFileClear(){
+        try {
+            FileWriter file = new FileWriter(fileName);
+            file.write("");
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getFileName() {

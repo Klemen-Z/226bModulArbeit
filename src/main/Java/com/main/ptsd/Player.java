@@ -4,19 +4,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Player extends Ship {
+    //various values for player
     private boolean l;
     private int health;
     private boolean r;
 
+    //screen dimensions
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-
-    public boolean isShoot() {
-        return shoot;
-    }
-
-    public void setShoot(boolean shoot) {
-        this.shoot = shoot;
-    }
 
     private boolean shoot;
     ArrayList<Player_Projectile> PProjectiles = new ArrayList<>();
@@ -27,11 +21,12 @@ public class Player extends Ship {
         setHealth(health);
     }
 
+    //shoot method for player bullets
     public void shoot(){
         PProjectiles.add(new Player_Projectile(8, 1, getX() + 25, getY(), 1));
     }
 
-
+    //movement for player (based on pressed button)
     public void move(){
         int speed = 8;
         if(this.l && getX()  > 0) {
@@ -39,6 +34,15 @@ public class Player extends Ship {
         } else if (this.r && getX() < size.getWidth()-150){
             setX(getX() + speed);
         }
+    }
+
+    //getters and setter for all values
+    public boolean isShoot() {
+        return shoot;
+    }
+
+    public void setShoot(boolean shoot) {
+        this.shoot = shoot;
     }
 
     public void setL(boolean l) {

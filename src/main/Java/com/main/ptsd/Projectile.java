@@ -3,6 +3,7 @@ package com.main.ptsd;
 import java.awt.*;
 
 public abstract class Projectile {
+    //variables for all projectiles
     private int damage;
     private boolean hit;
     private int speed;
@@ -10,9 +11,11 @@ public abstract class Projectile {
     private int x;
     private int y;
 
+    //get screen size
     Dimension SSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     Projectile(int speed, int damage, int x, int y, int size){
+        //set all values
         setDamage(damage);
         setSpeed(speed);
         setX(x);
@@ -20,6 +23,7 @@ public abstract class Projectile {
         setSize(size);
     }
 
+    //getters and setters for projectiles
     public int getSpeed() {
         return speed;
     }
@@ -68,6 +72,7 @@ public abstract class Projectile {
         this.damage = damage;
     }
 
+    //check for out-of-bounds projectiles
     public boolean outOfBoundsCheck(String bulet) {
         if (bulet.equals("e")) {
             return 0 < this.y && SSize.getHeight() < this.y;

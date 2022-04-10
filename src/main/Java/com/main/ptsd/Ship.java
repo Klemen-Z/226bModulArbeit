@@ -1,6 +1,7 @@
 package com.main.ptsd;
 
 public abstract class Ship {
+    //general variables for enemy and player ships
     private int size;
     private int y;
     private int x;

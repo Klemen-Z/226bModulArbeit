@@ -1,6 +1,8 @@
 package com.main.ptsd;
 
 public class Enemy extends Ship {
+
+    //variables for how enemies should behave
     private boolean l = false;
     private boolean r = true;
     private int points;
@@ -15,10 +17,9 @@ public class Enemy extends Ship {
         setY(y);
         setX(x);
         setHealth(health);
-
-
     }
 
+    //enemy movement (based on where the outermost enemies are)
     public void move(){
         int speed = 3;
         if(this.l) {
@@ -28,6 +29,7 @@ public class Enemy extends Ship {
         }
     }
 
+    //getters and setters for all values
     public int getHealth() {return health;}
 
     public void setHealth(int health) {this.health = health;}

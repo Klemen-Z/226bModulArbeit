@@ -6,11 +6,13 @@ public class Player_Projectile extends Projectile{
         super(speed, damage, x, y, size);
     }
 
+    //movement upwards
     public void move(){
         int speed = 8;
         setY(getY() - speed);
     }
 
+    //hit checking on projectile
     public boolean hitCheck(int ex, int ey, int size){
         return this.getX() >= ex && this.getX() <= ex + size && this.getY() >= ey && this.getY() <= ey + size;
     }

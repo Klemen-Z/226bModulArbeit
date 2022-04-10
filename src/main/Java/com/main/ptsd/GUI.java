@@ -1,5 +1,6 @@
 package com.main.ptsd;
 
+//Imports from God knows how many sources
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -9,20 +10,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import javax.sound.sampled.*;
 
 public class GUI extends JPanel implements ActionListener {
-
+    //Get size of user's display
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private final int height = (int) size.getHeight() - 100;
     private final int width = (int) size.getWidth() - 100;
+
+    //create player and Arraylists for enemy projectiles and Enemies
     Player pl = new Player(width / 2 - 25, height - 100, 5);
     ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
     ArrayList<Obstacle> obstacles = new ArrayList<>();
+    ArrayList<Enemy> Enemy = new ArrayList<>();
+
+    //Create JSON File interactor and score saving class (Scoreboard)
     DataDealer dataDealer;
     Scoreboard scoreboard = new Scoreboard();
     {
@@ -32,10 +37,15 @@ public class GUI extends JPanel implements ActionListener {
             e.printStackTrace();
         }
     }
-    ArrayList<Enemy> Enemy = new ArrayList<>();
+    int highscore;
+    int score = 0;
+
+    //create image variables
     Image playerimg;
     Image enemyimg;
     Image backgroundimg;
+
+    //Create variables for game to function (how often it updates and if it has finished or not)
     static final int tickrate = 1;
     Timer timer;
     int rtos = -90;
@@ -44,21 +54,27 @@ public class GUI extends JPanel implements ActionListener {
     boolean win = false;
     boolean lose = false;
     static int difficulity = 1;
-    int score = 0;
     int etime = 100;
     int invincibilityframe = 0;
     boolean bro = true;
-    int highscore;
+
 
     GUI() {
+        //get highscore from file
         long highscore2 = scoreboard.getHighscore();
         highscore = (int) highscore2;
-        this.setPreferredSize(new Dimension(width, height));
+
+        //load images from resources folder
         backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
         playerimg = new ImageIcon(loadImage("playerimg.png", 50, 50)).getImage();
         enemyimg = new ImageIcon(loadImage("enemyimg.png", 50, 50)).getImage();
+
+        //Frame things (size, background, etc.)
+        this.setPreferredSize(new Dimension(width, height));
         this.setBackground(Color.BLACK);
         this.setFocusable(true);
+
+        //create keylisteners for WASD, space and arrow keys
         this.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -138,6 +154,7 @@ public class GUI extends JPanel implements ActionListener {
         startgame();
     }
 
+    //Image loader for JAR file (Resource Folder is accessed)
     public Image loadImage(String name, int width, int height){
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream input = classLoader.getResourceAsStream(name);
@@ -152,12 +169,14 @@ public class GUI extends JPanel implements ActionListener {
         return image.getScaledInstance(width, height,  Image.SCALE_SMOOTH);
     }
 
+    //Create Obstacless
     private void makeobstacles() {
         for (int i = 1; i <= 4; i++) {
             obstacles.add(new Obstacle(100,50,width*i/5,height-300));
         }
     }
 
+    //Create Enemies (Based on difficulty chosen)
     private void makeenemy() {
         if (difficulity == 1) {
             for (int i = 1; i <= 20; i++) {
@@ -322,12 +341,15 @@ public class GUI extends JPanel implements ActionListener {
         }
     }
 
+    //method to check (every frame) if something has been hit
     private void hitCheckAll() {
+        //Variables for deleted objects
         Integer delete1 = null;
         Integer delete2 = null;
         Integer delete3 = null;
         Integer delete4 = null;
 
+        //check for end of game conditions
         if (Enemy.isEmpty()) {
             win = true;
             runing = false;
@@ -337,6 +359,7 @@ public class GUI extends JPanel implements ActionListener {
             lose = true;
         }
 
+        //hit checking for player shooting at enemy
         for (Enemy enemy : Enemy) {
             for (Player_Projectile pp : pl.PProjectiles) {
                 if (pp.hitCheck(enemy.getX(), enemy.getY(), 50)) {
@@ -350,6 +373,7 @@ public class GUI extends JPanel implements ActionListener {
             }
         }
 
+        //Hit checking for Enemy shooting on player
         for (Enemy_Projectile ep : EProjectiles) {
             if (ep.hitCheck(pl.getX(), pl.getY(),50) && invincibilityframe <= 0) {
                 invincibilityframe = 30;
@@ -361,6 +385,8 @@ public class GUI extends JPanel implements ActionListener {
                 ep.setHit(true);
             }
         }
+
+        //Hit check for anyone shooting at Obstacles
         for (Obstacle obstacle: obstacles) {
             for (Enemy_Projectile ep : EProjectiles) {
                 if (ep.hitCheck(obstacle.getX(), obstacle.getY(), obstacle.getSize())) {
@@ -382,6 +408,7 @@ public class GUI extends JPanel implements ActionListener {
         }
 
 
+        //Delete the requested items
         if (delete1 != null) {
             score = score + Enemy.get(delete1).getPoints();
             Enemy.remove((int) delete1);
@@ -389,18 +416,24 @@ public class GUI extends JPanel implements ActionListener {
         if (delete2 != null) {
             pl.PProjectiles.remove((int) delete2);
         }
-        if (delete4 != null) {
-            obstacles.remove((int) delete4);
-        }
         if (delete3 != null) {
             EProjectiles.remove((int) delete3);
         }
+        if (delete4 != null) {
+            obstacles.remove((int) delete4);
+        }
     }
 
+    //Method to move everything every frame
     private void allmove() {
+        //for Bullets to be deleted of screen
         ArrayList<Integer> delete1 = new ArrayList<>();
         Integer delete2 = null;
+
+        //move player
         pl.move();
+
+        //enemy out-of-bounds check
         for (Enemy enemy : Enemy) {
             if (enemy.getX() <= 0) {
                 for (Enemy enemy2 : Enemy) {
@@ -417,16 +450,22 @@ public class GUI extends JPanel implements ActionListener {
                 }
             }
         }
+        //move enemies
         for (Enemy enemy : Enemy) {
             enemy.move();
+            //if enemies reached player, player loses
             if (enemy.getY() >= pl.getY() - 50) {
                 lose = true;
                 runing = false;
             }
         }
+
+        //move player projectiles
         for (Player_Projectile pprojectile : pl.PProjectiles) {
             pprojectile.move();
         }
+
+        //
         if (rtos > 10 && pl.isShoot()) {
             try {
                 music();
@@ -436,19 +475,27 @@ public class GUI extends JPanel implements ActionListener {
             pl.shoot();
             rtos = 0;
         }
+
+        //move enemy projectiles
         for (Enemy_Projectile eprojectile : EProjectiles) {
             eprojectile.move();
         }
+
+        //Enemy projectiles out-of-bounds check
         for (Enemy_Projectile ep : EProjectiles) {
             if (ep.outOfBoundsCheck("e")) {
                 delete1.add(EProjectiles.indexOf(ep));
             }
         }
+
+        //Player projectiles out-of-bounds check
         for (Player_Projectile pp : pl.PProjectiles) {
             if (pp.outOfBoundsCheck("p")) {
                 delete2 = pl.PProjectiles.indexOf(pp);
             }
         }
+
+        //Remove offending projectiles
         for (Integer d1 : delete1) {
             EProjectiles.remove((int) d1);
         }

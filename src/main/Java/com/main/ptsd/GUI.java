@@ -364,19 +364,19 @@ public class GUI extends JPanel implements ActionListener {
         for (Obstacle obstacle: obstacles) {
             for (Enemy_Projectile ep : EProjectiles) {
                 if (ep.hitCheck(obstacle.getX(), obstacle.getY(), obstacle.getSize())) {
-                    obstacle.setHealth(obstacle.getHealth() - 1);
+                    obstacle.setHp(obstacle.getHp() - 1);
                     delete3 = EProjectiles.indexOf(ep);
                     ep.setHit(true);
                 }
             }
             for (Player_Projectile pp : pl.PProjectiles) {
                 if (pp.hitCheck(obstacle.getX(), obstacle.getY(), obstacle.getSize())) {
-                    obstacle.setHealth(obstacle.getHealth() - 1);
+                    obstacle.setHp(obstacle.getHp() - 1);
                     delete2 = pl.PProjectiles.indexOf(pp);
                     pp.setHit(true);
                 }
             }
-            if (obstacle.getHealth() <= 0) {
+            if (obstacle.getHp() <= 0) {
                 delete4 = obstacles.indexOf(obstacle);
             }
         }

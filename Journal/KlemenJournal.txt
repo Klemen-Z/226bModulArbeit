@@ -2,15 +2,17 @@
 
 19.03.2022 - Meisten von den Get und set Methoden + Variabeln geschrieben
 
-25.03.2022 - Hauptmethoden für die Objekten geschrieben
+25.03.2022 - Hauptmethoden für die Objekte geschrieben
 
 28.03.2022 - Bewegung methode updated mit extra parameter für wann es möglich ist
-             zu bewegen und triff detektion für den Geschoss
+             zu bewegen und triff detektion für das Geschoss
 
-29.03.2022 - Schiessen gemacht und debugged so wie auch die andere Bugs im Spiel selbst
-             (Jetzt nur den Main Menu zu machen)
+29.03.2022 - Schiessen gemacht und debugged so wie auch die andere Bugs im Spiel.
 
 1.04.2022 - 7.04.2022 - Gleiche JSON Bug probieren zu fixe. Ich habe es nicht geschafft
-            (Error ist: Unexpected token END OF FILE at position 0.), weiss nicht wieso es vorkommt
+            (Error ist: Unexpected token END OF FILE at position 0), weiss nicht wieso es vorkommt
 
-8.04.2022 -
+8.04.2022 - JSON funktioniert. Filewriter müsste nach dem parse von der Datei kommen.
+            Bild laden im Jar funktioniert mit lag
+
+10.04.2022 - Bild laden im JAR jetzt funktioniert ohne Lag

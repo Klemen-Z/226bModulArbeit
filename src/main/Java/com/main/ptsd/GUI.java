@@ -23,7 +23,6 @@ public class GUI extends JPanel implements ActionListener {
     ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
     DataDealer dataDealer;
     Scoreboard scoreboard = new Scoreboard();
-
     {
         try {
             dataDealer = new DataDealer("Highscore.json");
@@ -31,8 +30,6 @@ public class GUI extends JPanel implements ActionListener {
             e.printStackTrace();
         }
     }
-
-
     ArrayList<Enemy> Enemy = new ArrayList<>();
     Image playerimg;
     Image enemyimg;
@@ -55,6 +52,7 @@ public class GUI extends JPanel implements ActionListener {
         long highscore2 = scoreboard.getHighscore();
         highscore = (int) highscore2;
         this.setPreferredSize(new Dimension(width, height));
+        backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
         playerimg = new ImageIcon(loadImage("playerimg.png", 50, 50)).getImage();
         enemyimg = new ImageIcon(loadImage("enemyimg.png", 50, 50)).getImage();
         this.setBackground(Color.BLACK);
@@ -252,7 +250,6 @@ public class GUI extends JPanel implements ActionListener {
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         if (runing) {
-            backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawRect(pl.getX(), pl.getY(), 50, 50);
             for (Player_Projectile pprojectile : pl.PProjectiles) {
@@ -277,13 +274,11 @@ public class GUI extends JPanel implements ActionListener {
             }
 
         } else if (lose) {
-            backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 40));
             g2d.drawString("you lost", width / 2, height / 2);
         } else if (win) {
-            backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 40));
@@ -292,7 +287,6 @@ public class GUI extends JPanel implements ActionListener {
         } else if (startscreen) {
             Font selected = new Font("Calibri", Font.BOLD, 40);
             Font normal = new Font("Calibri", Font.PLAIN, 20);
-            backgroundimg = new ImageIcon(loadImage("backgroundimg.png", width, height)).getImage();
             g2d.setColor(Color.WHITE);
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawString("press space to start", width / 2, height / 2);

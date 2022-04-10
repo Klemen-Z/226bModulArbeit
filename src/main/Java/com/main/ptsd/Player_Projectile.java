@@ -11,7 +11,7 @@ public class Player_Projectile extends Projectile{
         setY(getY() - speed);
     }
 
-    public boolean hitCheck(int ex, int ey){
-        return this.getX() >= ex && this.getX() <= ex + 50 && this.getY() >= ey && this.getY() <= ey + 50;
+    public boolean hitCheck(int ex, int ey, int size){
+        return this.getX() >= ex && this.getX() <= ex + size && this.getY() >= ey && this.getY() <= ey + size;
     }
 }

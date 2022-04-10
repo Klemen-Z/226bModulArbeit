@@ -1,8 +1,5 @@
 package com.main.ptsd;
 
-import java.awt.*;
-import java.util.ArrayList;
-
 public class Enemy extends Ship {
     private boolean l = false;
     private boolean r = true;
@@ -10,10 +7,6 @@ public class Enemy extends Ship {
     private int attackspeed;
     private int etos;
     private int health;
-
-    Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-    private int height = (int) size.getHeight()-100;
-    private int width = (int) size.getWidth()-100;
 
     Enemy(int x, int y, int size, int health, int points, int attackspeed){
         setPoints(points);

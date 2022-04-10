@@ -4,9 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Player extends Ship {
-    private String name;
     private boolean l;
-    private Integer wave;
     private int health;
     private boolean r;
 
@@ -23,25 +21,16 @@ public class Player extends Ship {
     private boolean shoot;
     ArrayList<Player_Projectile> PProjectiles = new ArrayList<>();
 
-    Player(int x, int y, int health, String name, int size){
+    Player(int x, int y, int health){
         setX(x);
         setY(y);
         setHealth(health);
-        setSize(size);
-        setName(name);
     }
 
     public void shoot(){
         PProjectiles.add(new Player_Projectile(8, 1, getX() + 25, getY(), 1));
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     public void move(){
         int speed = 8;
@@ -66,14 +55,6 @@ public class Player extends Ship {
 
     public boolean getR() {
         return this.r;
-    }
-
-    public void setWave(Integer wave) {
-        this.wave = wave;
-    }
-
-    public Integer getWave() {
-        return wave;
     }
 
     public void setHealth(int health) {

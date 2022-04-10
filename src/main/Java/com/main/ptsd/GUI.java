@@ -20,8 +20,9 @@ public class GUI extends JPanel implements ActionListener {
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private final int height = (int) size.getHeight() - 100;
     private final int width = (int) size.getWidth() - 100;
-    Player pl = new Player(width / 2 - 25, height - 100, 5, "player", 1);
+    Player pl = new Player(width / 2 - 25, height - 100, 5);
     ArrayList<Enemy_Projectile> EProjectiles = new ArrayList<>();
+    ArrayList<Obstacle> obstacles = new ArrayList<>();
     DataDealer dataDealer;
     Scoreboard scoreboard = new Scoreboard();
     {
@@ -92,6 +93,7 @@ public class GUI extends JPanel implements ActionListener {
                         runing = true;
                         startscreen = false;
                         makeenemy();
+                        makeobstacles();
                     }
                     if (e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0 && lose || win && e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0) {
                         startscreen = true;
@@ -118,6 +120,7 @@ public class GUI extends JPanel implements ActionListener {
                     }
                 }
             }
+
 
             @Override
             public void keyReleased(KeyEvent e) {
@@ -149,11 +152,10 @@ public class GUI extends JPanel implements ActionListener {
         return image.getScaledInstance(width, height,  Image.SCALE_SMOOTH);
     }
 
-    public URL loadSound(String name) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        URL SoundURL;
-        SoundURL = getClass().getResource(name);
-        System.out.println(SoundURL);
-        return SoundURL;
+    private void makeobstacles() {
+        for (int i = 1; i <= 4; i++) {
+            obstacles.add(new Obstacle(100,50,width*i/5,height-300));
+        }
     }
 
     private void makeenemy() {
@@ -266,7 +268,12 @@ public class GUI extends JPanel implements ActionListener {
             } else {
                 g2d.drawString("High-Score:" + score, 10, 40);
             }
-
+            for (int i=0; pl.getHealth() >= i; i++) {
+                g2d.fillOval(5,height-i*25,25,25);
+            }
+            for (Obstacle obstacle: obstacles) {
+                g2d.fillRect(obstacle.getX(),obstacle.getY(),obstacle.getSize(),obstacle.getSize());
+            }
         } else if (lose) {
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.setColor(Color.WHITE);
@@ -290,25 +297,25 @@ public class GUI extends JPanel implements ActionListener {
                 g2d.drawString("Easy", width / 4, 100);
                 g2d.setFont(normal);
                 g2d.drawString("Normal", width / 2, 100);
-                g2d.drawString("Russian", width / 2 + width / 4, 100);
+                g2d.drawString("Hard", width / 2 + width / 4, 100);
             } else if (difficulity == 2) {
                 g2d.setFont(normal);
                 g2d.drawString("Easy", width / 4, 100);
                 g2d.setFont(selected);
                 g2d.drawString("Normal", width / 2, 100);
                 g2d.setFont(normal);
-                g2d.drawString("Russian", width / 2 + width / 4, 100);
+                g2d.drawString("Hard", width / 2 + width / 4, 100);
             } else if (difficulity == 3) {
                 g2d.setFont(normal);
                 g2d.drawString("Easy", width / 4, 100);
                 g2d.drawString("Normal", width / 2, 100);
                 g2d.setFont(selected);
-                g2d.drawString("Russian", width / 2 + width / 4, 100);
+                g2d.drawString("Hard", width / 2 + width / 4, 100);
             } else if (difficulity == 4) {
                 g2d.setFont(normal);
                 g2d.drawString("Easy", width / 4, 100);
                 g2d.drawString("Normal", width / 2, 100);
-                g2d.drawString("Russian", width / 2 + width / 4, 100);
+                g2d.drawString("Hard", width / 2 + width / 4, 100);
                 g2d.setFont(selected);
                 g2d.drawString("Korean", width / 2, 200);
             }
@@ -319,6 +326,7 @@ public class GUI extends JPanel implements ActionListener {
         Integer delete1 = null;
         Integer delete2 = null;
         Integer delete3 = null;
+        Integer delete4 = null;
 
         if (Enemy.isEmpty()) {
             win = true;
@@ -331,7 +339,7 @@ public class GUI extends JPanel implements ActionListener {
 
         for (Enemy enemy : Enemy) {
             for (Player_Projectile pp : pl.PProjectiles) {
-                if (pp.hitCheck(enemy.getX(), enemy.getY())) {
+                if (pp.hitCheck(enemy.getX(), enemy.getY(), 50)) {
                     enemy.setHealth(enemy.getHealth()-1);
                     if (enemy.getHealth() <= 0) {
                         delete1 = Enemy.indexOf(enemy);
@@ -343,11 +351,33 @@ public class GUI extends JPanel implements ActionListener {
         }
 
         for (Enemy_Projectile ep : EProjectiles) {
-            if (ep.hitCheck(pl.getX(), pl.getY()) && invincibilityframe <= 0) {
+            if (ep.hitCheck(pl.getX(), pl.getY(),50) && invincibilityframe <= 0) {
                 invincibilityframe = 30;
                 pl.setHealth(pl.getHealth() - 1);
                 delete3 = EProjectiles.indexOf(ep);
                 ep.setHit(true);
+            } else if (ep.hitCheck(pl.getX(), pl.getY(), 50)) {
+                delete3 = EProjectiles.indexOf(ep);
+                ep.setHit(true);
+            }
+        }
+        for (Obstacle obstacle: obstacles) {
+            for (Enemy_Projectile ep : EProjectiles) {
+                if (ep.hitCheck(obstacle.getX(), obstacle.getY(), obstacle.getSize())) {
+                    obstacle.setHealth(obstacle.getHealth() - 1);
+                    delete3 = EProjectiles.indexOf(ep);
+                    ep.setHit(true);
+                }
+            }
+            for (Player_Projectile pp : pl.PProjectiles) {
+                if (pp.hitCheck(obstacle.getX(), obstacle.getY(), obstacle.getSize())) {
+                    obstacle.setHealth(obstacle.getHealth() - 1);
+                    delete2 = pl.PProjectiles.indexOf(pp);
+                    pp.setHit(true);
+                }
+            }
+            if (obstacle.getHealth() <= 0) {
+                delete4 = obstacles.indexOf(obstacle);
             }
         }
 
@@ -358,6 +388,9 @@ public class GUI extends JPanel implements ActionListener {
         }
         if (delete2 != null) {
             pl.PProjectiles.remove((int) delete2);
+        }
+        if (delete4 != null) {
+            obstacles.remove((int) delete4);
         }
         if (delete3 != null) {
             EProjectiles.remove((int) delete3);
@@ -449,6 +482,10 @@ public class GUI extends JPanel implements ActionListener {
         pl.setY(height - 100);
         Enemy.clear();
         pl.PProjectiles.clear();
+        EProjectiles.clear();
+        for (Enemy enemy: Enemy) {
+            enemy.setEtos(0);
+        }
 
     }
 
@@ -457,6 +494,14 @@ public class GUI extends JPanel implements ActionListener {
             enemy.setEtos(enemy.getEtos() + 1);
             if (enemy.getEtos() > enemy.getAttackspeed()) {
                 if (difficulity != 4) {
+                    try {
+                        music();
+                    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                        e.printStackTrace();
+                    }
+                    EProjectiles.add(new Enemy_Projectile(8, 1, enemy.getX() + 25, enemy.getY() + 50, 1));
+                    enemy.setEtos(0);
+                } else {
                     EProjectiles.add(new Enemy_Projectile(8, 1, enemy.getX() + 25, enemy.getY() + 50, 1));
                     enemy.setEtos(0);
                 }

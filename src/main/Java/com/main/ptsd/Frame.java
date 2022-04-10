@@ -11,11 +11,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 public class Frame extends JFrame {
+    // Some variables
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private int height = (int) size.getHeight();
     private int width = (int) size.getWidth();
     GUI panel;
-
+    //Image loader for JAR file (Resource Folder is accessed)
     public Image loadImage(String name, int width, int height){
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream input = classLoader.getResourceAsStream(name);

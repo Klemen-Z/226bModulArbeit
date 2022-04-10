@@ -82,6 +82,7 @@ public class GUI extends JPanel implements ActionListener {
 
             @Override
             public void keyPressed(KeyEvent e) {
+                // keylistener for player movement
                 if (runing) {
                     if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                         pl.setShoot(true);
@@ -105,12 +106,14 @@ public class GUI extends JPanel implements ActionListener {
                         }
                     }
                 } else {
+                    // key listener for starting the game
                     if (e.getKeyCode() == KeyEvent.VK_SPACE && !lose && !win && etime > 0) {
                         runing = true;
                         startscreen = false;
                         makeenemy();
                         makeobstacles();
                     }
+                    // key listener for resetting the game
                     if (e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0 && lose || win && e.getKeyCode() == KeyEvent.VK_SPACE && etime < 0) {
                         startscreen = true;
                         etime = 1000;
@@ -121,6 +124,7 @@ public class GUI extends JPanel implements ActionListener {
                         long highscore2 = scoreboard.getHighscore();
                         highscore = (int) highscore2;
                     }
+                    // key listener for selecting difficulty
                     switch (e.getKeyCode()) {
                         case KeyEvent.VK_LEFT -> {
                             if (GUI.difficulity > 1) {
@@ -141,6 +145,7 @@ public class GUI extends JPanel implements ActionListener {
             @Override
             public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
+                    // the other part of the player movement key listener
                     case KeyEvent.VK_LEFT -> pl.setL(false);
                     case KeyEvent.VK_RIGHT -> pl.setR(false);
                     case KeyEvent.VK_A -> pl.setL(false);
@@ -256,14 +261,15 @@ public class GUI extends JPanel implements ActionListener {
             }
         }
     }
-
+// starts the timer witch makes the game tick every x milliseconds
     private void startgame() {
         timer = new Timer(tickrate, this);
         timer.start();
     }
-
+// the method that paints everything visible. this method gets called automatically
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
+        // while the game is running it draws all the game objects
         if (runing) {
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.drawRect(pl.getX(), pl.getY(), 50, 50);
@@ -294,6 +300,7 @@ public class GUI extends JPanel implements ActionListener {
                 g2d.fillRect(obstacle.getX(),obstacle.getY(),obstacle.getSize(),obstacle.getSize());
             }
         } else if (lose) {
+            // depending on weather you lose or win in draws something
             g2d.drawImage(backgroundimg, 0, 0, width, height, null);
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Calibri", Font.BOLD, 40));
@@ -305,6 +312,7 @@ public class GUI extends JPanel implements ActionListener {
             g2d.drawString("you won", width / 2, height / 2);
             g2d.drawString("Score:" + score, 10, 40);
         } else if (startscreen) {
+            // draws the startscreen
             Font selected = new Font("Calibri", Font.BOLD, 40);
             Font normal = new Font("Calibri", Font.PLAIN, 20);
             g2d.setColor(Color.WHITE);
@@ -465,7 +473,7 @@ public class GUI extends JPanel implements ActionListener {
             pprojectile.move();
         }
 
-        //
+        //the shoot method gets called if the last shoot is 10 game ticks away and if the space is pressed
         if (rtos > 10 && pl.isShoot()) {
             try {
                 music();
@@ -504,8 +512,9 @@ public class GUI extends JPanel implements ActionListener {
             pl.PProjectiles.remove((int) delete2);
         }
     }
-
+    //gets called if you win and is only here to differentiate from win and lose
     public void Win() {
+        // sends data to be written into the JSON file and restarts the game afterwords
         if (bro) {
             dataDealer.dataStore(new Date(), score);
             try {
@@ -517,11 +526,11 @@ public class GUI extends JPanel implements ActionListener {
         }
         Restart();
     }
-
+    //only restarts the game so you cant get a highscore when you lose
     public void Lose() {
         Restart();
     }
-
+    //resets a lot of variables, so we can restart the game
     public void Restart() {
         runing = false;
         pl.setHealth(5);
@@ -533,12 +542,13 @@ public class GUI extends JPanel implements ActionListener {
         for (Enemy enemy: Enemy) {
             enemy.setEtos(0);
         }
-
     }
-
+    //makes the enemys shoot
     private void theygotthatgat() {
         for (Enemy enemy : Enemy) {
+            //increment time since last shot
             enemy.setEtos(enemy.getEtos() + 1);
+            //if time since lase shot is bigger than attack speed shoot
             if (enemy.getEtos() > enemy.getAttackspeed()) {
                 if (difficulity != 4) {
                     try {
@@ -549,13 +559,14 @@ public class GUI extends JPanel implements ActionListener {
                     EProjectiles.add(new Enemy_Projectile(8, 1, enemy.getX() + 25, enemy.getY() + 50, 1));
                     enemy.setEtos(0);
                 } else {
+                    // the reason for 2 shooting parts is that shooting with sound in difficulty 4 kills the game cause so many projectiles get made. if you want to try it out change this "difficulity != 4" to this "difficulity != 5". also use headphones for best experience
                     EProjectiles.add(new Enemy_Projectile(8, 1, enemy.getX() + 25, enemy.getY() + 50, 1));
                     enemy.setEtos(0);
                 }
             }
         }
     }
-
+    //the sound method. it doesnt really play music.
     public void music() throws UnsupportedAudioFileException, IOException, LineUnavailableException
     {
         AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("src/main/Resources/shoot1.wav").getAbsoluteFile());
@@ -563,7 +574,7 @@ public class GUI extends JPanel implements ActionListener {
         clip.open(audioStream);
         clip.start();
     }
-
+    // this method gets called every game tick
     @Override
     public void actionPerformed(ActionEvent e) {
         if (runing) {

@@ -6,13 +6,9 @@ import java.util.ArrayList;
 public class Enemy extends Ship {
     private boolean l = false;
     private boolean r = true;
-    private int score;
     private int points;
     private int attackspeed;
     private int etos;
-
-
-
     private int health;
 
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -43,19 +39,8 @@ public class Enemy extends Ship {
 
     public void setHealth(int health) {this.health = health;}
 
-    public void shoot(){
-    }
-
     public int getPoints() {
         return points;
-    }
-
-    public boolean getL(){
-        return l;
-    }
-
-    public boolean getR(){
-        return r;
     }
 
     public int getAttackspeed() {
@@ -83,11 +68,5 @@ public class Enemy extends Ship {
 
     public void setPoints(int points) {
         this.points = points;
-    }
-
-    public void hit(boolean t){
-        if (t){
-         //   EProjectiles.clear();
-        }
     }
 }

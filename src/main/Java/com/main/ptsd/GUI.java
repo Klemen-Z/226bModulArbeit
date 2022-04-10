@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -148,19 +149,12 @@ public class GUI extends JPanel implements ActionListener {
         return image.getScaledInstance(width, height,  Image.SCALE_SMOOTH);
     }
 
-    /*public File loadSound(String name, int width, int height){
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream input = classLoader.getResourceAsStream(name);
-        BufferedInputStream sound = null;
-        try {
-            assert input != null;
-            sound = IO;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert image != null;
-        return image.getScaledInstance(width, height,  Image.SCALE_SMOOTH);
-    }*/
+    public URL loadSound(String name) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        URL SoundURL;
+        SoundURL = getClass().getResource(name);
+        System.out.println(SoundURL);
+        return SoundURL;
+    }
 
     private void makeenemy() {
         if (difficulity == 1) {
@@ -338,7 +332,10 @@ public class GUI extends JPanel implements ActionListener {
         for (Enemy enemy : Enemy) {
             for (Player_Projectile pp : pl.PProjectiles) {
                 if (pp.hitCheck(enemy.getX(), enemy.getY())) {
-                    delete1 = Enemy.indexOf(enemy);
+                    enemy.setHealth(enemy.getHealth()-1);
+                    if (enemy.getHealth() <= 0) {
+                        delete1 = Enemy.indexOf(enemy);
+                    }
                     delete2 = pl.PProjectiles.indexOf(pp);
                     pp.setHit(true);
                 }
@@ -460,21 +457,16 @@ public class GUI extends JPanel implements ActionListener {
             enemy.setEtos(enemy.getEtos() + 1);
             if (enemy.getEtos() > enemy.getAttackspeed()) {
                 if (difficulity != 4) {
-                    try {
-                        music();
-                    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-                        ex.printStackTrace();
-                    }
+                    EProjectiles.add(new Enemy_Projectile(8, 1, enemy.getX() + 25, enemy.getY() + 50, 1));
+                    enemy.setEtos(0);
                 }
-                EProjectiles.add(new Enemy_Projectile(8, 1, enemy.getX() + 25, enemy.getY() + 50, 1));
-                enemy.setEtos(0);
             }
         }
     }
+
     public void music() throws UnsupportedAudioFileException, IOException, LineUnavailableException
     {
-        File file = new File("src/main/Resources/shoot1.wav");
-        AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("src/main/Resources/shoot1.wav").getAbsoluteFile());
         Clip clip = AudioSystem.getClip();
         clip.open(audioStream);
         clip.start();
